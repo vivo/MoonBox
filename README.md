@@ -181,6 +181,5 @@ moonbox-java-agent 使用 **transmittable-thread-local** (简称ttl)进行跨线
 
 ## 微信交流群
 
-todo二维码
 
 ![image](https://user-images.githubusercontent.com/28141497/210727826-755bbaec-b2af-42eb-9608-8005a58c96ef.png)
