@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vivo.internet.moonbox.dal.mapper.HeartbeatInfoMapper">
+  <resultMap id="BaseResultMap" type="com.vivo.internet.moonbox.dal.entity.HeartbeatInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="task_run_id" jdbcType="VARCHAR" property="taskRunId" />
+    <result column="env" jdbcType="VARCHAR" property="env" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="last_heartbeat_time" jdbcType="TIMESTAMP" property="lastHeartbeatTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, task_run_id, env, ip, last_heartbeat_time, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.vivo.internet.moonbox.dal.entity.HeartbeatInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_heartbeat_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_heartbeat_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_heartbeat_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.vivo.internet.moonbox.dal.entity.HeartbeatInfo">
+    insert into tb_heartbeat_info (id, task_run_id, env, 
+      ip, last_heartbeat_time, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{taskRunId,jdbcType=VARCHAR}, #{env,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{lastHeartbeatTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.vivo.internet.moonbox.dal.entity.HeartbeatInfo">
+    insert into tb_heartbeat_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskRunId != null">
+        task_run_id,
+      </if>
+      <if test="env != null">
+        env,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="lastHeartbeatTime != null">
+        last_heartbeat_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="taskRunId != null">
+        #{taskRunId,jdbcType=VARCHAR},
+      </if>
+      <if test="env != null">
+        #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="lastHeartbeatTime != null">
+        #{lastHeartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.vivo.internet.moonbox.dal.entity.HeartbeatInfo">
+    update tb_heartbeat_info
+    <set>
+      <if test="taskRunId != null">
+        task_run_id = #{taskRunId,jdbcType=VARCHAR},
+      </if>
+      <if test="env != null">
+        env = #{env,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="lastHeartbeatTime != null">
+        last_heartbeat_time = #{lastHeartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.vivo.internet.moonbox.dal.entity.HeartbeatInfo">
+    update tb_heartbeat_info
+    set task_run_id = #{taskRunId,jdbcType=VARCHAR},
+      env = #{env,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      last_heartbeat_time = #{lastHeartbeatTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertOrUpdate" parameterType="com.vivo.internet.moonbox.dal.entity.HeartbeatInfo">
+    insert into tb_heartbeat_info (id, task_run_id, env,
+                                   ip, last_heartbeat_time, create_time)
+    values (#{id,jdbcType=BIGINT}, #{taskRunId,jdbcType=VARCHAR}, #{env,jdbcType=VARCHAR},
+            #{ip,jdbcType=VARCHAR}, #{lastHeartbeatTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+    ON DUPLICATE KEY UPDATE last_heartbeat_time=#{lastHeartbeatTime,jdbcType=TIMESTAMP};
+  </insert>
+</mapper>

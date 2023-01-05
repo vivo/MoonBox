@@ -1,0 +1,65 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": "5",
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "replayDate": {
+          "type": "long"
+        },
+        "replayTraceId": {
+          "type": "keyword"
+        },
+        "cost": {
+          "type": "long"
+        },
+        "replayTaskRunId": {
+          "type": "keyword"
+        },
+        "mockInvocation": {
+          "type": "keyword"
+        },
+        "recordTaskRunId": {
+          "type": "keyword"
+        },
+        "recordTaskTemplateId": {
+          "type": "keyword"
+        },
+        "entranceDesc": {
+          "type": "keyword"
+        },
+        "invokeType": {
+          "type": "keyword"
+        },
+        "appName": {
+          "type": "keyword"
+        },
+        "recordTraceId": {
+          "type": "keyword"
+        },
+        "environment": {
+          "type": "keyword"
+        },
+        "compareErrorUri": {
+          "type": "keyword"
+        },
+        "replayResponse": {
+          "type": "keyword"
+        },
+        "responseDiffResult": {
+          "type": "keyword"
+        },
+        "replayHost": {
+          "type": "keyword"
+        },
+        "replayResultStatus": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

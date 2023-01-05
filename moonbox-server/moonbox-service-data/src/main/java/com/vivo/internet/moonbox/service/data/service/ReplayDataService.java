@@ -1,0 +1,94 @@
+package com.vivo.internet.moonbox.service.data.service;
+
+import java.util.List;
+
+import com.vivo.internet.moonbox.common.api.dto.PageRequest;
+import com.vivo.internet.moonbox.common.api.dto.PageResult;
+import com.vivo.internet.moonbox.common.api.model.RepeatModel;
+import com.vivo.internet.moonbox.service.data.model.replay.RepeatModelEntity;
+import com.vivo.internet.moonbox.service.data.model.replay.ReplayDataListQuery;
+import com.vivo.internet.moonbox.service.data.model.replay.ReplayUriCountQuery;
+import com.vivo.internet.moonbox.service.data.model.replay.ReplayUriCountResult;
+
+/**
+ * ReplayDataService - {link ReplayDataService}
+ *
+ * @author yanjiang.liu
+ * @version 1.0
+ * @since 2022/8/22 14:19
+ */
+public interface ReplayDataService {
+
+    /**
+     * get replay uri count detail this function is provided for display to the
+     * console web view
+     *
+     * @param query
+     *            request {@link PageRequest<ReplayUriCountQuery>}
+     * @return {@link PageResult <ReplayUriCountResult>}
+     */
+    List<ReplayUriCountResult> getReplayUriCountList(ReplayUriCountQuery query);
+
+    /**
+     * get replay uri data list this function is provided for display to the console
+     * web view
+     *
+     * @param pageRequest
+     *            request {@link PageRequest< ReplayDataListQuery >}
+     * @return {@link PageResult <ReplayDataResult>}
+     */
+    PageResult<RepeatModelEntity> getReplayDataList(PageRequest<ReplayDataListQuery> pageRequest);
+
+    /**
+     * get replay uri data detail info this function is provided for display to the
+     * console web view
+     *
+     * @param replayTaskRunId
+     *            replayTaskRunId
+     * @param replayTraceId
+     *            replayTraceId
+     * @return {@link RepeatModel}
+     */
+    RepeatModelEntity getReplayDataDetail(String replayTaskRunId, String replayTraceId);
+
+    /**
+     * get replay fail count web view
+     *
+     * @param replayTaskRunId
+     *            replayTaskRunId
+     * @return failCount
+     */
+    Long getReplayFailCount(String replayTaskRunId);
+
+    /**
+     * delete replay data detail this function is provided for display to the
+     * console web view
+     *
+     * @param replayTaskRunId
+     *            replayTaskRunId
+     * @param replayTraceId
+     *            replayTraceId
+     * @return {@link RepeatModel}
+     */
+    Boolean deleteData(String replayTaskRunId, String replayTraceId);
+
+    /**
+     * 保存流量回复数据
+     *
+     * @param entity
+     *            entity
+     * @return {@link boolean}
+     */
+    boolean saveReplayData(RepeatModelEntity entity);
+
+    /**
+     * 根据回放任务id查询回放任务
+     *
+     * @param replayTaskRunId
+     *            replayTaskRunId
+     * @param lastId
+     *            lastId
+     * @return {@link PageResult< String>} 返回失败的录制traceId
+     */
+    PageResult<String> queryFailedRepeaters(String replayTaskRunId, String lastId);
+}

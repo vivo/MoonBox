@@ -1,0 +1,31 @@
+package com.vivo.jvm.sandbox.moonbox.plugin.caffeine;
+
+import com.alibaba.jvm.sandbox.api.event.BeforeEvent;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
+import com.alibaba.jvm.sandbox.repeater.plugin.utils.ParameterTypesUtil;
+import com.vivo.internet.moonbox.common.api.model.Identity;
+import com.vivo.internet.moonbox.common.api.model.InvokeType;
+
+/**
+ * CaffeineCacheInvocationProcessor - guava cache处理插件
+ */
+public class CaffeineCacheInvocationProcessor extends DefaultInvocationProcessor {
+    public CaffeineCacheInvocationProcessor(InvokeType type) {
+        super(type);
+    }
+
+    @Override
+    public Identity assembleIdentity(BeforeEvent event) {
+        //这么做是为了防止V get(K key, Callable<? extends V> valueLoader) 这种所以取第一个
+        Object[] eventArray = event.argumentArray;
+        return new Identity(getType().name(), event.javaClassName, event.javaMethodName + ParameterTypesUtil.getTypesStrByObjects(new Object[]{eventArray[0]}), getExtra());
+    }
+
+    @Override
+    public Object[] assembleRequest(BeforeEvent event) {
+        if (event.argumentArray != null && event.argumentArray.length > 1) {
+            return new Object[]{event.argumentArray[0]};
+        }
+        return event.argumentArray;
+    }
+}

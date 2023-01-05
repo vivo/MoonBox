@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>moonbox-java-agent</artifactId>
+        <groupId>com.vivo.internet</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>moonbox-plugins</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>moonbox/apache-http-client-plugin</module>
+        <module>moonbox/caffeine-cache-plugin</module>
+        <module>moonbox/date-time-plugin</module>
+        <module>moonbox/eh-cache-plugin</module>
+        <module>moonbox/elasticsearch-plugin</module>
+        <module>moonbox/guava-cache-plugin</module>
+        <module>moonbox/kafka-producer-plugin</module>
+        <module>moonbox/mybatis-plus-plugin</module>
+        <module>moonbox/okhttp-plugin</module>
+        <module>moonbox/rest-client-plugin</module>
+        <module>moonbox/shuffle-plugin</module>
+        <module>moonbox/spring-mongo-plugin</module>
+        <module>moonbox/spring-session-plugin</module>
+        <module>moonbox/universal-plugin</module>
+
+        <module>repeater/dubbo-plugin</module>
+        <module>repeater/hibernate-plugin</module>
+        <module>repeater/http-plugin</module>
+        <module>repeater/ibatis-plugin</module>
+        <module>repeater/java-plugin</module>
+        <module>repeater/mybatis-plugin</module>
+        <module>repeater/redis-plugin</module>
+        <module>repeater/socketio-plugin</module>
+        <module>repeater/spring-data-jpa-plugin</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba.jvm.sandbox</groupId>
+            <artifactId>sandbox-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vivo.internet</groupId>
+            <artifactId>moonbox-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

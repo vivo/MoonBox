@@ -1,0 +1,53 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": "5",
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "date": {
+          "type": "long"
+        },
+        "traceId": {
+          "type": "keyword"
+        },
+        "cost": {
+          "type": "long"
+        },
+        "recordTaskRunId": {
+          "type": "keyword"
+        },
+        "recordTaskTemplateId": {
+          "type": "keyword"
+        },
+        "entranceDesc": {
+          "type": "keyword"
+        },
+        "invokeType": {
+          "type": "keyword"
+        },
+        "wrapperRecord": {
+          "type": "text"
+        },
+        "appName": {
+          "type": "keyword"
+        },
+        "environment": {
+          "type": "keyword"
+        },
+        "recordHost": {
+          "type": "keyword"
+        },
+        "response": {
+          "type": "keyword"
+        },
+        "timeCost": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}

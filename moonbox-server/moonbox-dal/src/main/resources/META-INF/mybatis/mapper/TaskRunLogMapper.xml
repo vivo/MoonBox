@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vivo.internet.moonbox.dal.mapper.TaskRunLogMapper">
+    <resultMap id="ResultMapWithBLOBs" type="com.vivo.internet.moonbox.dal.entity.TaskRunLogWithBLOBs">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="task_run_id" jdbcType="VARCHAR" property="taskRunId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, task_run_id, content, create_time
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="selectByTaskRunId" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from tb_task_run_log
+        where task_run_id = #{taskRunId,jdbcType=VARCHAR}
+    </select>
+    <insert id="insertSelective" parameterType="com.vivo.internet.moonbox.dal.entity.TaskRunLogWithBLOBs">
+        insert into tb_task_run_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="taskRunId != null">
+                task_run_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="taskRunId != null">
+                #{taskRunId,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>
