@@ -1,0 +1,47 @@
+{
+  "name": "@moonbox/client",
+  "version": "0.0.1",
+  "description": "月光宝盒",
+  "author": "Xie Zhong",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=local vue-cli-service serve",
+    "build": "vue-cli-service build && gulp"
+  },
+  "dependencies": {
+    "ace-diff": "^3.0.3",
+    "axios": "^0.18.0",
+    "brace": "^0.11.1",
+    "clipboard": "2.0.4",
+    "element-ui": "^2.15.6",
+    "js-cookie": "2.2.0",
+    "lodash": "^4.17.20",
+    "lowdb": "^1.0.0",
+    "nprogress": "^0.2.0",
+    "qs": "^6.7.0",
+    "vue": "^2.6.10",
+    "vue-json-viewer": "^2.2.15",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-plugin-eslint": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "@vue/eslint-config-standard": "^3.0.1",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.14.1",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^5.2.2",
+    "filemanager-webpack-plugin": "^2.0.4",
+    "gulp": "^3.9.1",
+    "gulp-md5-plus": "^1.0.3",
+    "gulp-zip": "^4.2.0",
+    "html-webpack-inline-plugin": "^0.0.4",
+    "lint-staged": "^7.2.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.5.17"
+  }
+}
