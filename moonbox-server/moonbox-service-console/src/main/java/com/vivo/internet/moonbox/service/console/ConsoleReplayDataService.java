@@ -1,7 +1,19 @@
-package com.vivo.internet.moonbox.service.console;
+/*
+Copyright 2022 vivo Communication Technology Co., Ltd.
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
+package com.vivo.internet.moonbox.service.console;
 
 import com.vivo.internet.moonbox.common.api.dto.PageResult;
 import com.vivo.internet.moonbox.service.console.vo.ReplayDataVo;
@@ -25,19 +37,16 @@ public interface ConsoleReplayDataService {
         /**
          * 页码
          */
-        @NotNull
         private Integer pageNum;
 
         /**
          * 每页大小
          */
-        @NotNull
         private Integer pageSize;
 
         /**
          * 录制任务id
          */
-        @NotBlank
         private String replayTaskRunId;
 
         /**
@@ -58,24 +67,20 @@ public interface ConsoleReplayDataService {
         /**
          * 页码
          */
-        @NotNull
         private Integer pageNum;
 
         /**
          * 每页大小
          */
-        @NotNull
         private Integer pageSize;
         /**
          * 回放任务id
          */
-        @NotBlank
         private String  replayTaskRunId;
 
         /**
          * 回放接口
          */
-        @NotBlank
         private String  replayUri;
 
         /**

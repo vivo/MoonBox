@@ -1,41 +1,9 @@
 package com.alibaba.jvm.sandbox.repeater.plugin;
 
-import java.time.LocalDateTime;
-
 public class DateStringUtils {
 
-    private static String numPrefixPattern = "^[0-9]{6,17}$";
-
     public static boolean isDateString(String str) {
-        if (str == null) {
-            return false;
-        }
-        if (str.startsWith("202") && str.contains("T")) {  //2022-04-19T11:46:52.864
-            try {
-                LocalDateTime.parse(str);
-                return true;
-            } catch (Exception e) {
-            }
-        }
-        str = str.replaceAll(":|/|-|年|月|日| |", "");
-        if (!str.matches(numPrefixPattern)) {
-            return false;
-        }
-        Integer year = Integer.valueOf(str.substring(0, 4));
-        if (year < 2020 || year > 2025) {
-            return false;
-        }
-        Integer month = Integer.valueOf(str.substring(4, 6));
-        if (month < 1 || month > 12) {
-            return false;
-        }
-        if (str.length() >= 8) {
-            Integer day = Integer.valueOf(str.substring(6, 8));
-            if (day < 1 || day > 31) {
-                return false;
-            }
-        }
-        return true;
+        return false;
     }
 
     public static boolean isDateLong(Long data) {

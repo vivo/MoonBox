@@ -18,17 +18,17 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.boot.version>2.1.9.RELEASE</spring.boot.version>
+        <spring.boot.version>2.5.12</spring.boot.version>
         <spring.version>5.1.10.RELEASE</spring.version>
         <tomcat.version>8.5.54</tomcat.version>
 		<org.slf4j.version>1.7.24</org.slf4j.version>
 		<logback.version>1.2.1</logback.version>
-        <elasticsearch.version>7.16.2</elasticsearch.version>
-        <jackson-core.version>2.10.0</jackson-core.version>
-        <jackson-databind.version>2.10.0</jackson-databind.version>
+        <elasticsearch.version>7.17.1</elasticsearch.version>
+        <jackson-core.version>2.14.0</jackson-core.version>
+        <jackson-databind.version>2.14.0</jackson-databind.version>
         <testng.version>6.14.3</testng.version>
         <commons-collections4.version>4.1</commons-collections4.version>
-        <okhttp.version>3.9.0</okhttp.version>
+        <okhttp.version>4.9.3</okhttp.version>
         <!--打包相关-->
         <maven.surefire.plugin>3.0.0-M4</maven.surefire.plugin>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
@@ -37,8 +37,8 @@
         <apache.common.io.version>2.11.0</apache.common.io.version>
         <lombok.version>1.18.8</lombok.version>
         <sandbox.api.version>1.2.0</sandbox.api.version>
-        <guava.version>19.0</guava.version>
-        <page.helper>5.3.0</page.helper>
+        <guava.version>23.0</guava.version>
+        <page.helper>5.3.1</page.helper>
         <metainf-services>1.8</metainf-services>
     </properties>
 
@@ -154,6 +154,7 @@
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.vivo.jvm.sandbox</groupId>
