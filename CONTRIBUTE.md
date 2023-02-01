@@ -3,7 +3,7 @@
 
 ## Issue
 欢迎在Issue中反馈您在月光宝盒使用过程中的 问题 和 建议
-https://github.com/XXXXXXXX
+https://github.com/vivo/MoonBox/issues
 
 ## 如何贡献
 
