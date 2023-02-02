@@ -12,7 +12,7 @@
 | 虚拟机/容器        | 无             | 2台分别部署moonbox-server和VUE前端资源(server和vue也可以部署在一台机器)                        |
 
 #### 工程下载
-月光宝盒是标准的maven工程，因此机器环境需要安装 java 和 maven 并配置好环境变量。
+月光宝盒是标准的maven工程，因此需要安装 java 和 maven 并配置好环境变量。
 直接从代码仓下载代码到本地，在根目录执行 mvn clean install操作。执行maven工程的打包构建。
 
 代码结构说明如下：
