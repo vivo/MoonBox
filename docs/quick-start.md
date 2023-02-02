@@ -45,7 +45,7 @@ module.exports.devServer.proxy."/api".target="moonbox-server所部属机器的ip
 
 [mac安装参考](https://blog.csdn.net/m0_67402588/article/details/126075205)
 
-2、打开cmd或者powershell，cd至client目录
+2、打开cmd或powershell，cd至client目录
 
 3、npm install
 
