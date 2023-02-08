@@ -26,7 +26,7 @@ chmod +x ${SANDBOX_INSTALL_LOCAL}/bin/sandbox.sh
 mvn clean package -Dmaven.test.skip=true -f ../pom.xml || exit_on_err 1 "package repeater failed."
 mkdir -p ${REPEATER_TARGET_DIR}/plugins
 mkdir -p ${REPEATER_TARGET_DIR}/cfg
-cp -r ../cfg/ ${REPEATER_TARGET_DIR} \
+cp -r ../cfg ${REPEATER_TARGET_DIR} \
     && cp ../moonbox-module/target/moonbox-module-*-jar-with-dependencies.jar ${REPEATER_TARGET_DIR}/ \
     && cp ../moonbox-plugins/*/*-plugin/target/*-jar-with-dependencies.jar ${REPEATER_TARGET_DIR}/plugins/ \
     && cp -r ../bin/ ${REPEATER_TARGET_DIR}
