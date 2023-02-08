@@ -29,7 +29,9 @@ mkdir -p ${REPEATER_TARGET_DIR}/cfg
 cp -r ../cfg/ ${REPEATER_TARGET_DIR} \
     && cp ../moonbox-module/target/moonbox-module-*-jar-with-dependencies.jar ${REPEATER_TARGET_DIR}/ \
     && cp ../moonbox-plugins/*/*-plugin/target/*-jar-with-dependencies.jar ${REPEATER_TARGET_DIR}/plugins/ \
-    && cp -r ../bin/ ${REPEATER_TARGET_DIR}
+    && cp -r ../bin/ ${REPEATER_TARGET_DIR} \
+    && cp -r ../cfg/ ${REPEATER_TARGET_DIR}/cfg/
+
 
 # install repeater
 mkdir -p  ~/.sandbox-module/
