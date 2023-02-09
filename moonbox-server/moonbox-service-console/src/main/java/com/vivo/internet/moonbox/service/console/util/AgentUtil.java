@@ -23,12 +23,11 @@ import com.vivo.internet.moonbox.service.common.utils.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 
 /**
@@ -145,49 +144,39 @@ public class AgentUtil {
      * @throws Exception 异常
      */
     public static String javaCommandExecute(String exeCommand) throws Exception {
-        BufferedReader input = null;
-        BufferedReader error = null;
-        PrintWriter output = null;
-        try {
-            Process process = Runtime.getRuntime().exec(exeCommand);
-            process.waitFor();
-            input = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
-            error = new BufferedReader(new InputStreamReader(process.getErrorStream(), "GBK"));
-            output = new PrintWriter(new OutputStreamWriter(process.getOutputStream(), "GBK"));
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = input.readLine()) != null) {
-                builder.append(line).append("\n");
-            }
-            while ((line = error.readLine()) != null) {
-                builder.append(line).append("\n");
-            }
-            return builder.toString();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-            if (output != null) {
-                output.close();
-            }
-            if (error != null) {
-                try {
-                    error.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
+        StringBuilder errorBuilder = new StringBuilder();
+        StringBuilder inputBuilder = new StringBuilder();
+        Process process = Runtime.getRuntime().exec(exeCommand);
+        new InputStreamRunnable(process.getInputStream(), "input", inputBuilder).start();
+        new InputStreamRunnable(process.getErrorStream(), "error ", errorBuilder).start();
+        process.waitFor();
+        return inputBuilder.append(errorBuilder.toString()).toString();
     }
 
-    public static void main(String[] args) throws Exception {
-         String taskConfig="rc_id_039937bc028bb1df475c52c649906643%26http%3A%2F%2F127.0.0.1%3A8080%26INFO%26INFO";
-//        String command = getLocalAgentStartCommand("moonbox-web", taskConfig);
-//        javaCommandExecute(command);
-        System.out.println(getRemoteAgentStartCommand("http://127.0.0.1:8080/api/agent/downLoadSandBoxZipFile","http://127.0.0.1:8080/api/agent/downLoadMoonBoxZipFile","moonbox-web",taskConfig));
+    static class InputStreamRunnable extends Thread {
+        BufferedReader bReader = null;
+        String type = null;
+        StringBuilder builder = null;
+        public InputStreamRunnable(InputStream is, String _type,StringBuilder builder) {
+            try {
+                bReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(is), "UTF-8"));
+                type = _type;
+                this.builder = builder;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        @Override
+        public void run() {
+            String line;
+            try {
+                while ((line = bReader.readLine()) != null) {
+                    builder.append(line).append("\n");
+                }
+                bReader.close();
+            } catch (Exception ex) {
+                builder.append(ex.getMessage());
+            }
+        }
     }
 }
