@@ -5,8 +5,8 @@
 [2、代码简介](https://www.bilibili.com/video/BV1Hv4y1W7o5/)  <br>
 [3、本地部署](https://www.bilibili.com/video/BV1454y1w7m1/) <br>
 [4、功能简介](https://www.bilibili.com/video/BV16o4y1e7Em/) <br>
-[5、流量录制介](https://www.bilibili.com/video/BV15M411H7sC/) <br>
-[6、流量回放介](https://www.bilibili.com/video/BV1xD4y1A766/) <br>
+[5、流量录简介](https://www.bilibili.com/video/BV15M411H7sC/) <br>
+[6、流量回放简介](https://www.bilibili.com/video/BV1xD4y1A766/) <br>
 [7、自定义类Mock](https://www.bilibili.com/video/BV1614y1F7e9/) <br>
 [8、远程部署](https://www.bilibili.com/video/BV1Ae4y1c7Wn/) <br>
 
