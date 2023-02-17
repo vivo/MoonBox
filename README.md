@@ -43,8 +43,8 @@ Moonbox（月光宝盒）是一个**无侵入**的线上**流量录制** 和**�
 ## 快速开始
 详见 [快速开始](./docs/quick-start.md)
 
-## 问题排查参考
-[一些问题参考](https://github.com/vivo/MoonBox/wiki)
+## 问题参考
+[问题参考](https://github.com/vivo/MoonBox/wiki)
 
 ## 未来计划
 
