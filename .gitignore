@@ -49,3 +49,10 @@ yarn-error.log*
 
 # lock
 yarn.lock
+
+# docker
+docker/elasticsearch/data/*
+docker/elasticsearch/logs/*
+docker/elasticsearch/plugins/*
+
+!docker/web/**
