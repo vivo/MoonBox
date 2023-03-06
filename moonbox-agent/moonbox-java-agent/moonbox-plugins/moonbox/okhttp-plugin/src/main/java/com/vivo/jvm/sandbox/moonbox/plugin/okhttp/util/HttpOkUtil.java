@@ -23,6 +23,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 
 /**
@@ -55,7 +56,7 @@ public class HttpOkUtil {
             Object bodyByte = content.get(body);
             Object charset = MethodUtils.invokeMethod(MediaType, "charset");
 
-            return new String((byte[]) bodyByte, charset.toString());
+            return new String((byte[]) bodyByte, Objects.isNull(charset)?"UTF-8":charset.toString());
         } catch (Exception e) {
             MoonboxLogUtils.error("HttpOkRecordModifierHandler.getBody error:", e);
         }
