@@ -19,10 +19,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.base.Splitter;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
@@ -51,7 +54,10 @@ public class HttpDataConvert {
         String requestMethod = (String) requestMap.get("requestMethod");
         Map<String, String> headers = getSubInvokeHttpHeaders(requestHeaders, invokeType);
         Object requestBody = requestMap.get("requestBody");
-        Object body = jsonStringToObj((String) requestBody);
+        Object body = null;
+        if (!Objects.isNull(requestBody)) {
+            body = JSONObject.parse(requestBody.toString());
+        }
         return HttpData.builder().body(body).headers(headers).paramsMap((Map) requestMap.get("requestParams"))
                 .method(requestMethod).build();
     }
