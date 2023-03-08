@@ -140,7 +140,7 @@ public class RecordConvert {
             // 转换apache http 和ok http两种子调用http类型
             invocationVo = new HttpInvocationVo();
             HttpDataConvert.HttpData httpData = HttpDataConvert.convert(requestObjs, invokeType);
-            ((HttpInvocationVo) invocationVo).setBody(httpData);
+            ((HttpInvocationVo) invocationVo).setBody(httpData.getBody());
             ((HttpInvocationVo) invocationVo).setHeaders(httpData.getHeaders());
             ((HttpInvocationVo) invocationVo).setParamsMap(httpData.getParamsMap());
             ((HttpInvocationVo) invocationVo).setMethod(httpData.getMethod());
