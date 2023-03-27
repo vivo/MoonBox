@@ -58,8 +58,9 @@ Moonbox（月光宝盒）是一个**无侵入**的线上**流量录制** 和**�
 - 定时录制、回放能力
 
 ## （微信群）社区交流
-欢迎优先提交Issue、PR，欢迎使用、共建。
+
 ![微信交流](./docs/images/contact.png)  回复：moonbox微信群交流
+欢迎优先提交Issue、PR，欢迎使用、共建。
 
 ## 谁在使用
 如果您在使用MoonBox，请让我们知道，您的使用对我们非常重要：[登记链接](https://github.com/vivo/MoonBox/issues/9) （按登记顺序排列）
