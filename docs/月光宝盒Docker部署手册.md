@@ -5,7 +5,10 @@
 如果您不想修改任何配置，只想看看月光宝盒有啥功能，下载完代码后，在 **当前工程下的docker文件夹** 下，执行如下命令：
 
 ```shell
-docker-compose up
+# x86架构下
+docker-compose -f docker-compose.yml up
+# arm架构下
+docker-compose -f docker-compose-arm64.yml up
 ```
 
 这需要您保留本机的3307、9201、9301、8081、9999端口号，用于映射月光宝盒MySQL、Elasticsearch、服务端、前端的端口。
