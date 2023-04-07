@@ -4,12 +4,10 @@ This code comes from the jvm-sandbox-repeater(link:https://github.com/alibaba/jv
 package com.alibaba.jvm.sandbox.repeater.plugin.core.model;
 
 import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.ExceptionAware;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.InetAddressUtils;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.PropertyUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterConfig;
 import com.google.common.base.Objects;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * {@link MoonboxContext} 描述一个基础应用模型
@@ -98,13 +96,7 @@ public class MoonboxContext {
         // for example, you can define it your self
         this.appName = PropertyUtil.getSystemPropertyOrDefault("app.name", "unknown");
         this.environment = PropertyUtil.getSystemPropertyOrDefault("app.env", "unknown");
-
-        try {
-            this.host = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            // default value for disaster
-            this.host = "127.0.0.1";
-        }
+        this.host = InetAddressUtils.getLocalIp();
     }
 
     public static MoonboxContext getInstance() {
