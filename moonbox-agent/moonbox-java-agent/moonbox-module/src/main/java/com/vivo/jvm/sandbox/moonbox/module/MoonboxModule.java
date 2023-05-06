@@ -270,6 +270,9 @@ public class MoonboxModule implements Module, ModuleLifecycle {
                         repeater.setBroadcast(broadcaster);
                     }
                     RepeaterBridge.instance().build(repeaters);
+                    //修改mock策略模式cache的初始化实际，修改为启动的时候初始化，运行时初始化的话：运行的classloader和插件加载的classLoader
+                    // 不是同一个，导致初始化strategyCached数据为空
+                    lifecycleManager.initMockStrategyRoute();
                 }
 
                 log.info("MoonboxModule initialized successfully...");

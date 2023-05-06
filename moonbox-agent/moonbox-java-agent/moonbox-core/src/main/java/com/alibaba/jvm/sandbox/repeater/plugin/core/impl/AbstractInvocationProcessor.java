@@ -100,8 +100,8 @@ public abstract class AbstractInvocationProcessor implements InvocationProcessor
                 /*
                  * 执行mock动作
                  */
-                final MockResponse mr = StrategyProvider.Holder.INSTANCE
-                        .provide(context.getMeta().getStrategyType(), request.getType().name()).execute(request);
+                final MockResponse mr = StrategyProvider.provide(context.getMeta().getStrategyType(),
+                    request.getType().name()).execute(request);
                 /*
                  * 处理策略推荐结果
                  */

@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import com.alibaba.jvm.sandbox.repeater.plugin.api.LifecycleManager;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.StrategyProvider;
 import com.alibaba.jvm.sandbox.repeater.plugin.spi.InvokePlugin;
 import com.alibaba.jvm.sandbox.repeater.plugin.spi.Repeater;
 import com.google.common.collect.Lists;
@@ -52,6 +53,13 @@ public class JarFileLifeCycleManager implements LifecycleManager {
     @Override
     public List<Repeater> loadRepeaters() {
         return SPILoader.loadSPI(Repeater.class, classLoader);
+    }
+
+
+
+    @Override
+    public void initMockStrategyRoute(){
+        StrategyProvider.initStrategyCache(classLoader);
     }
 
     @Override

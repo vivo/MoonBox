@@ -31,6 +31,13 @@ public interface LifecycleManager {
      */
     List<Repeater> loadRepeaters();
 
+
+    /**
+     * 初始化回放mock插件
+     */
+    public void initMockStrategyRoute();
+
+
     /**
      * 释放资源
      */
