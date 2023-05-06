@@ -16,6 +16,7 @@ limitations under the License.
 package com.vivo.jvm.sandbox.moonbox.plugin.mybatisplus;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.jvm.sandbox.api.event.BeforeEvent;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
 import com.vivo.internet.moonbox.common.api.model.Identity;
@@ -29,6 +30,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * MybatisPlusInvocationProcessor
@@ -69,13 +71,45 @@ public class MybatisPlusInvocationProcessor extends DefaultInvocationProcessor {
             return (Object[]) event.argumentArray[1];
         }
         try {
-            List<Map> list = JSON.parseArray(JSON.toJSONString(event.argumentArray[1]), Map.class);
-            return list.toArray();
+            //深拷贝，把引用传递修改成引用值传递。
+            //List<Map> list = JSON.parseArray(JSON.toJSONString(event.argumentArray[1]), Map.class);
+            //return list.toArray();
+            Object[] args = (Object[])event.argumentArray[1];
+            Object[] returnArgs = new Object[args.length];
+            for (int i = 0; i < args.length; i++) {
+                Object arg = args[i];
+                if (arg == null || Objects.equals("com.baomidou.mybatisplus.extension.plugins.pagination.Page",
+                    arg.getClass().getName())) {
+                    //入参为空直接continue
+                    //page对象不进行深拷贝。如果业务应用做分页查询时，查询过后，会往入参的page对象中set进totalNum或者其他信息。
+                    returnArgs[i] = arg;
+                    continue;
+                }
+                returnArgs[i] = deepCopyArg(arg);
+            }
+            return returnArgs;
         } catch (Exception e) {
             return (Object[]) event.argumentArray[1];
         }
 
     }
+
+    /**
+     * 入参进行深拷贝
+     *
+     * @param arg
+     * @return
+     */
+    private Object deepCopyArg(Object arg) {
+        try {
+            String middleStr = JSONObject.toJSONString(arg);
+            return JSONObject.parseObject(middleStr, arg.getClass());
+        } catch (Exception e) {
+            //这个地方进行日志打印了。有可能很频繁异常。比如入参没有instance。极有可能json转换异常。如果转换异常直接不拷贝
+            return arg;
+        }
+    }
+
 
     @Override
     public boolean inTimeSerializeRequest(Invocation invocation, BeforeEvent event) {
