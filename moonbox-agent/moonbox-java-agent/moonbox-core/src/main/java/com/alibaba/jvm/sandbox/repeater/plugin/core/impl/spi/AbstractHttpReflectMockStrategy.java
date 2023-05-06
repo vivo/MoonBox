@@ -22,23 +22,42 @@ public abstract class AbstractHttpReflectMockStrategy extends AbstractReflectCom
         //如果是http子调用的花截取域名后面的uri
         String subbedUri = "";
         if (InvokeType.isHttpSubInvocation(request.getType())) {
-            subbedUri = requestUri.substring(requestUri.indexOf("/", requestUri.indexOf("//",
-                    requestUri.indexOf("//") + 2) + 2));
+            subbedUri = getUriSubbed(requestUri);
         }
 
         final List<Invocation> subInvocations = request.getRecordModel().getSubInvocations();
         for (Invocation invocation : subInvocations) {
 
             String invocationUri = invocation.getIdentity().getUri();
+            String invocationUriSubbed = getUriSubbed(invocationUri);
+            //兼容录制和回放uri存在不同的情况。
+            //比如使用了mockserver平台。  线上的url为：http://test.com/a/b/c   回放的子调用的url为：http://线下ip/mock/xxx/a/b/c
+            boolean isSubUriEqual = invocationUri.endsWith(subbedUri) || requestUri.endsWith(invocationUriSubbed);
             if (StringUtils.equals(invocationUri, requestUri)) {
                 targets.add(invocation);
             } else
                 //如果都是http子调用的话，比较截取后的uri，匹配也添加到target中
-                if (InvokeType.isHttpSubInvocation(invocation.getType()) && InvokeType.isHttpSubInvocation(request.getType()) && invocationUri.endsWith(subbedUri)) {
+                if (InvokeType.isHttpSubInvocation(invocation.getType()) && InvokeType.isHttpSubInvocation(
+                    request.getType()) && isSubUriEqual) {
                     targets.add(invocation);
                 }
         }
         return targets;
+    }
+
+
+    /**
+     * 去除域名中的地址部分，获取uri的链接。
+     *
+     * @param uri
+     * @return
+     */
+    private String getUriSubbed(String uri) {
+        if (StringUtils.isBlank(uri)) {
+            return uri;
+        }
+        return uri.substring(uri.indexOf("/", uri.indexOf("//",
+            uri.indexOf("//") + 2) + 2));
     }
 
     @Override
