@@ -1,15 +1,17 @@
 package com.alibaba.jvm.sandbox.repeater.plugin.core.impl.spi;
 
-import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.JacksonUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.mock.MockRequest;
 import com.google.common.collect.Lists;
 import com.vivo.internet.moonbox.common.api.model.Invocation;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public abstract class AbstractHttpReflectMockStrategy extends AbstractReflectCompareStrategy {
 
     @Override
@@ -62,11 +64,14 @@ public abstract class AbstractHttpReflectMockStrategy extends AbstractReflectCom
             if (null != paramCurrent.get("requestBody")) {
                 if (paramCurrent.get("requestBody") instanceof String) {
                     try {
+                        //body的反序列化方式修改为fastjson。使用jackson反序列化的时候某些情况会爆 Cannot construct instance of的异常。
                         Object currentAfterDeSerialized =
-                                JacksonUtils.deserialize(String.valueOf(paramCurrent.get("requestBody")),
-                                        Object.class);
+                            JSONObject.parseObject(String.valueOf(paramCurrent.get("requestBody")),
+                                Object.class);
                         paramCurrent.put("requestBody", currentAfterDeSerialized);
                     } catch (Exception e) {
+                        //增加异常打印。一些很奇怪的问题因为这个地方日志丢了，导致无法排查。
+                        log.error("getCompareData is error,",e);
                     }
                 }
             }
