@@ -33,7 +33,11 @@ public class CaffeineCacheInvocationProcessor extends DefaultInvocationProcessor
     public Identity assembleIdentity(BeforeEvent event) {
         //这么做是为了防止V get(K key, Callable<? extends V> valueLoader) 这种所以取第一个
         Object[] eventArray = event.argumentArray;
-        return new Identity(getType().name(), event.javaClassName, event.javaMethodName + ParameterTypesUtil.getTypesStrByObjects(new Object[]{eventArray[0]}), getExtra());
+        //增加非空判断。兼容业务应用中使用localcache调用asMap这样的无参的方法。
+        Object[] identityObjectArray = eventArray == null || eventArray.length == 0 ? new Object[] {}
+            : new Object[] {eventArray[0]};
+        return new Identity(getType().name(), event.javaClassName,
+            event.javaMethodName + ParameterTypesUtil.getTypesStrByObjects(new Object[] {identityObjectArray}), getExtra());
     }
 
     @Override
