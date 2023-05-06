@@ -96,6 +96,25 @@ public class ReplayConvert {
                 mockInvocationVoBuilder.originData(invocationVo);
                 mockInvocationVoBuilder.diffs(convertDifference(mockInvocation.getDiffs()));
 
+                //回放的数据，在控制台展示数据由二进制转换为string展示。
+                Object[] requestObjArray = mockInvocation.getCurrentArgs();
+                Object[] dealRequestObjArray;
+                if(isRedisUri(mockInvocation.getCurrentUri())){
+                    //redis的入参需要特殊处理。
+                    String[] paramTypeArray;
+                    if(invocationVo==null){
+                        paramTypeArray=RequestDataConvert.analysisRedisParameterType(mockInvocation.getCurrentUri());
+                    }else{
+                        paramTypeArray=invocationVo.getParameterTypes();
+                    }
+                    dealRequestObjArray = RequestDataConvert.dealRequestObjects(requestObjArray,
+                        mockInvocation.getCurrentUri(), paramTypeArray);
+                }else{
+                    dealRequestObjArray = requestObjArray;
+                }
+                mockInvocationVoBuilder.currentArgs(dealRequestObjArray);
+
+
                 MockInvocationVo mockInvocationVo = mockInvocationVoBuilder.build();
 
                 if (!isHttpUri(mockInvocation.getCurrentUri())) {
@@ -149,6 +168,11 @@ public class ReplayConvert {
             return uri.substring(0, uri.indexOf("://"));
         }
         return "";
+    }
+
+
+    public static boolean isRedisUri(String uri) {
+        return uri.startsWith(InvokeType.REDIS.name());
     }
 
     /**
