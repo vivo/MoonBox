@@ -61,7 +61,8 @@ public class OkhttpInvocationProcessor extends DefaultInvocationProcessor {
                     MethodUtils.invokeMethod(url, "host"));
             Collection<String> collection = (Collection<String>) MethodUtils.invokeMethod(url, "pathSegments");
             if (collection != null && collection.size() > 0) {
-                urlStr = urlStr + joiner.join(collection);
+                //当前okhttp录制的identity为：地址和uri之间少了斜杠，和解析时候的规则不一致。修复这个bug。
+                urlStr = urlStr +"/"+ joiner.join(collection);
             }
 
         } catch (Exception e) {
