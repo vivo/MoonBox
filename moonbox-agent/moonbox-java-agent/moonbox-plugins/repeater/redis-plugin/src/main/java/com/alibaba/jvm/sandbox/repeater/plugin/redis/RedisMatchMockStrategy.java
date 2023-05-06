@@ -7,11 +7,13 @@ import com.alibaba.jvm.sandbox.repeater.plugin.spi.MockStrategy;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.vivo.internet.moonbox.common.api.model.Invocation;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
 import org.kohsuke.MetaInfServices;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @MetaInfServices(MockStrategy.class)
@@ -72,6 +74,40 @@ public class RedisMatchMockStrategy extends AbstractReflectCompareStrategy {
                     String replaceTimeKey = DateStringUtils.replaceDateTimeToTips(key);
                     returnObject[i] = replaceTimeKey;
                 }
+            }
+            //兼容redis.opsForHash().putAll(xx,xxx)场景
+            if(returnObject[i] instanceof LinkedHashMap){
+                LinkedHashMap<Object,Object> middleMap= (LinkedHashMap<Object,Object>)returnObject[i];
+                LinkedHashMap<Object,Object> returnMap=new LinkedHashMap<Object,Object>();
+                for(Object key:middleMap.keySet()){
+                    Object addKey=key;
+                    if(key instanceof byte[]){
+                        String middleKey=getPlainTextKey((byte[])key);
+                        if (middleKey != null) {
+                            addKey = DateStringUtils.replaceDateTimeToTips(middleKey);
+                        }else{
+                            addKey=middleKey;
+                        }
+                    }
+                    Object value=middleMap.get(key);
+                    Object addValue=value;
+                    if(value instanceof byte[]){
+                        addValue= getPlainTextKey((byte[])value);
+                    }
+                    returnMap.put(addKey,addValue);
+                }
+                returnObject[i]=returnMap;
+            }
+            //兼容redis的list操作的场景。
+            if(returnObject[i] instanceof byte[][]){
+                byte[][] paramByteArray= (byte[][])returnObject[i];
+                List<Object> paramList= Lists.newArrayList();
+                for(byte[] byteArray:paramByteArray){
+                    String key=getPlainTextKey(byteArray);
+                    key= DateStringUtils.replaceDateTimeToTips(key);
+                    paramList.add(key);
+                }
+                returnObject[i]=paramList;
             }
         }
 
