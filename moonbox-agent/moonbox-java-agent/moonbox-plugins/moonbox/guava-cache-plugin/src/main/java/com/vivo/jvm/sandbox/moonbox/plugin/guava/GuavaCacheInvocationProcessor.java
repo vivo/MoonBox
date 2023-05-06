@@ -16,6 +16,7 @@ limitations under the License.
 package com.vivo.jvm.sandbox.moonbox.plugin.guava;
 
 import com.alibaba.jvm.sandbox.api.event.BeforeEvent;
+import com.alibaba.jvm.sandbox.api.event.InvokeEvent;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
 import com.alibaba.jvm.sandbox.repeater.plugin.utils.ParameterTypesUtil;
 import com.vivo.internet.moonbox.common.api.model.Identity;
@@ -44,4 +45,20 @@ public class GuavaCacheInvocationProcessor extends DefaultInvocationProcessor {
         }
         return event.argumentArray;
     }
+
+
+    @Override
+    public boolean ignoreEvent(InvokeEvent event) {
+        // 跳过com.github.pagehelper和org.apache.ibatis里面的guava cache缓存框架
+        //add by lz PR之前代码中在回放的时候跳过了，这样录制的时候再录制pagehelper和ibatis中cache数据已无意义。增加这个方法目的是回放和录制均跳过。
+        for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+            if (stackTraceElement.getClassName().contains("com.github.pagehelper")
+                || stackTraceElement.getClassName().contains("org.apache.ibatis")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
