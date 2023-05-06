@@ -31,7 +31,7 @@ public abstract class AbstractDBMyBatisReflectCompareStrategy extends AbstractRe
 
     /**
      * 因为insert过程参数使用的是引用传递，录制的时候会把主键信息，以及mybatis中拦截器中处理的信息都放到参数中。
-     * 回放的时候由于有mock了。主键信息以及拦截器处理信息都会不存在。因为需要回塞。
+     * 回放的时候由于有mock了。主键信息以及拦截器处理信息都会不存在。因此需要回塞。
      *
      * 1. 优点：提升回放成功率。
      * 2. 缺点：回放的时候如果回塞的数据发生变化会导致无法发现。
