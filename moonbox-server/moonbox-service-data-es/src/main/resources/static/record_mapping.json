@@ -42,7 +42,7 @@
           "type": "keyword"
         },
         "response": {
-          "type": "keyword"
+          "type": "text"
         },
         "timeCost": {
           "type": "long"
