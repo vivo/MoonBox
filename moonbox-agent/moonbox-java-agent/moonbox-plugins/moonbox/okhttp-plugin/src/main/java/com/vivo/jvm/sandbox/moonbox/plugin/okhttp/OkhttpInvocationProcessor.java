@@ -161,6 +161,14 @@ public class OkhttpInvocationProcessor extends DefaultInvocationProcessor {
         return (Map<String, List<String>>) MethodUtils.invokeMethod(headers, "toMultimap");
     }
 
+    /**
+     * add by liuckyliu
+     * 当前默认的response针对的场景为Okhttp4.如果业务应用使用okhttp3的话解析会存在问题。
+     * 如果业务应用中使用到了okhttp3的话，可以把下面注释掉的assembleMockResponse方法放开替换掉当前方法。
+     * @param event
+     * @param invocation
+     * @return
+     */
     @Override
     public Object assembleMockResponse(BeforeEvent event, Invocation invocation) {
 
@@ -217,6 +225,88 @@ public class OkhttpInvocationProcessor extends DefaultInvocationProcessor {
 
         return null;
     }
+
+    /**
+     * add by lucky.liu
+     * 兼容okhttp3的assembleMockResponse的方法
+     *
+     * @param responseBuilder
+     * @param responseHeaders
+     * @throws Exception
+     */
+    //@Override
+    //public Object assembleMockResponse(BeforeEvent event, Invocation invocation) {
+    //
+    //    // okhttp3.RealCall
+    //    try {
+    //        Object request = this.getRequestFromEvent(event);
+    //        // 构建返回body体
+    //        Map<String, Object> responseMap = (Map<String, Object>)invocation.getResponse();
+    //        if (MapUtils.isEmpty(responseMap)) {
+    //            new Object();
+    //        }
+    //
+    //        String responseStr = (String)responseMap.get("responseBody");
+    //        //long responseContentLength = responseStr.getBytes().length;
+    //        Class<?> bufferClass = event.javaClassLoader.loadClass("okio.Buffer");
+    //        Object buffer = bufferClass.newInstance();
+    //
+    //        InputStream inputStream = HttpOkUtil.getStringInputStream(responseStr);
+    //        if (inputStream == null) {
+    //            MoonboxLogUtils.error("okhttp-plugin get response stream error");
+    //            return new Object();
+    //        }
+    //        MethodUtils.invokeMethod(buffer, "readFrom", inputStream);
+    //        Class<?> protocolClass = event.javaClassLoader.loadClass("okhttp3.Protocol");
+    //
+    //        // 构建返回协议
+    //        Object protocol = MethodUtils.invokeStaticMethod(protocolClass, "get", responseMap.get("responseProtocol"));
+    //
+    //        Map<String, List<String>> responseHeaders = (Map<String, List<String>>)responseMap.get("responseHeaders");
+    //
+    //        // 内部类需要$隔离开
+    //        Class<?> responseBuilderClass = event.javaClassLoader.loadClass("okhttp3.Response$Builder");
+    //        Object responseBuilder = responseBuilderClass.newInstance();
+    //
+    //
+    //
+    //        //返回body对象
+    //        //兼容okhttp3版本
+    //        List<String> nameAndValuesList=Lists.newArrayList();
+    //        for(String key:responseHeaders.keySet()){
+    //            List<String> headerValueList=responseHeaders.get(key);
+    //            nameAndValuesList.add(key);
+    //            nameAndValuesList.add(StringUtils.join(headerValueList,";"));
+    //        }
+    //        String[] nameAndValue=nameAndValuesList.toArray(new String[nameAndValuesList.size()]);
+    //        Class<?> headerClass = event.javaClassLoader.loadClass("okhttp3.Headers");
+    //        Method method = headerClass.getMethod("of", String[].class);
+    //        Object header=method.invoke(null,new Object[]{nameAndValue});
+    //        Class<?> realResponseBodyClass = event.javaClassLoader.loadClass("okhttp3.internal.http.RealResponseBody");
+    //        Constructor<?>[] constructors = realResponseBodyClass.getConstructors();
+    //        Object responseBody = constructors[0].newInstance(header, buffer);
+    //
+    //        // 构建返回对象response
+    //        long currentTime = System.currentTimeMillis();
+    //        MethodUtils.invokeMethod(responseBuilder, "request", request);
+    //        MethodUtils.invokeMethod(responseBuilder, "protocol", protocol);
+    //        MethodUtils.invokeMethod(responseBuilder, "code", (Integer)responseMap.get("responseCode"));
+    //        MethodUtils.invokeMethod(responseBuilder, "message", responseMap.get("responseMessage"));
+    //        MethodUtils.invokeMethod(responseBuilder, "body", responseBody);
+    //        MethodUtils.invokeMethod(responseBuilder, "sentRequestAtMillis", currentTime - 1);
+    //        MethodUtils.invokeMethod(responseBuilder, "receivedResponseAtMillis", currentTime);
+    //        this.mockResponseAddHeaders(responseBuilder, responseHeaders);
+    //
+    //        return MethodUtils.invokeMethod(responseBuilder, "build");
+    //    } catch (Exception e) {
+    //        MoonboxLogUtils.error("okhttp-plugin assembleMockResponse error, event={}",
+    //            event.javaClassName + "|" + event.javaMethodName, e);
+    //    }
+    //
+    //    return null;
+    //}
+
+
 
     private void mockResponseAddHeaders(Object responseBuilder, Map<String, List<String>> responseHeaders) throws Exception {
 
