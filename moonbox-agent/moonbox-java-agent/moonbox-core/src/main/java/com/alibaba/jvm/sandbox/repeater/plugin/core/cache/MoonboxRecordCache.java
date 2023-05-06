@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -168,7 +169,9 @@ public class MoonboxRecordCache {
                             Object[] tmpRequest = in.getRequest();
                             String uri1 = invocation.getIdentity().getUri();
                             String uri2 = in.getIdentity().getUri();
-                            if (Arrays.equals(request, tmpRequest) && uri1.equalsIgnoreCase(uri2)) {
+                            //合并的前提的维度增加结果集相等。
+                            if (Arrays.equals(request, tmpRequest) && uri1.equalsIgnoreCase(uri2) && Objects.equals(
+                                invocation.getResponse(), in.getResponse())) {
                                 in.setResponse(invocation.getResponse());
                                 in.setResponseSerialized(invocation.getResponseSerialized());
                                 add = false;
