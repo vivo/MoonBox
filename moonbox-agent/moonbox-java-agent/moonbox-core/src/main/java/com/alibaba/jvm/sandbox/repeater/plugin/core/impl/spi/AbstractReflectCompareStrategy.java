@@ -194,7 +194,7 @@ public abstract class AbstractReflectCompareStrategy extends AbstractMockStrateg
 
         //Map<String, FieldDiffConfig> diffConfigMap = diffConfigs.stream()
         //        .collect(Collectors.toMap(FieldDiffConfig::getUri, a -> a, (k1, k2) -> k1));
-        //修复如果子调用如果忽略多个字段时，只有一个自调用字段忽略生效的问题。
+        //修复如果子调用如果忽略多个字段时，只有一个子调用字段忽略生效的问题。
         Map<String, List<FieldDiffConfig>> diffConfigMap = Maps.newHashMap();
         diffConfigs.forEach(fieldDiffConfig -> {
             List<FieldDiffConfig> middleFieldDiffConfig = diffConfigMap.computeIfAbsent(fieldDiffConfig.getUri(),
