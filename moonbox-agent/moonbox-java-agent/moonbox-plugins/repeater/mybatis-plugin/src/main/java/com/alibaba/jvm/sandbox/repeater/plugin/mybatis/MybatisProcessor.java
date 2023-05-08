@@ -56,7 +56,7 @@ class MybatisProcessor extends DefaultInvocationProcessor {
         }
         String methodName = getMybatisOperateType(event);
         if (StringUtils.contains(methodName, "insert")) {
-            //Èç¹ûÊÇ²åÈë²Ù×÷£¬²»Òª½øĞĞÉî¿½±´
+            //å¦‚æœæ˜¯æ’å…¥æ“ä½œï¼Œä¸è¦è¿›è¡Œæ·±æ‹·è´
             return args;
         }
         try {
@@ -75,8 +75,8 @@ class MybatisProcessor extends DefaultInvocationProcessor {
     }
 
     /**
-     * »ñÈ¡dbµÄ²Ù×÷ÀàĞÍ
-     * ·µ»ØÀàĞÍÈ«²¿ÎªĞ¡Ğ´
+     * è·å–dbçš„æ“ä½œç±»å‹
+     * è¿”å›ç±»å‹å…¨éƒ¨ä¸ºå°å†™
      *
      * @param event
      * @return

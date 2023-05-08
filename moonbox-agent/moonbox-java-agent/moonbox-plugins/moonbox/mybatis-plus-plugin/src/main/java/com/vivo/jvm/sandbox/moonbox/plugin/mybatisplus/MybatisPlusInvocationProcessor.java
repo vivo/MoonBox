@@ -71,7 +71,7 @@ public class MybatisPlusInvocationProcessor extends DefaultInvocationProcessor {
             return (Object[]) event.argumentArray[1];
         }
         try {
-            //Éî¿½±´£¬°ÑÒıÓÃ´«µİĞŞ¸Ä³ÉÒıÓÃÖµ´«µİ¡£
+            //æ·±æ‹·è´ï¼ŒæŠŠå¼•ç”¨ä¼ é€’ä¿®æ”¹æˆå¼•ç”¨å€¼ä¼ é€’ã€‚
             //List<Map> list = JSON.parseArray(JSON.toJSONString(event.argumentArray[1]), Map.class);
             //return list.toArray();
             Object[] args = (Object[])event.argumentArray[1];
@@ -80,8 +80,8 @@ public class MybatisPlusInvocationProcessor extends DefaultInvocationProcessor {
                 Object arg = args[i];
                 if (arg == null || Objects.equals("com.baomidou.mybatisplus.extension.plugins.pagination.Page",
                     arg.getClass().getName())) {
-                    //Èë²ÎÎª¿ÕÖ±½Ócontinue
-                    //page¶ÔÏó²»½øĞĞÉî¿½±´¡£Èç¹ûÒµÎñÓ¦ÓÃ×ö·ÖÒ³²éÑ¯Ê±£¬²éÑ¯¹ıºó£¬»áÍùÈë²ÎµÄpage¶ÔÏóÖĞset½øtotalNum»òÕßÆäËûĞÅÏ¢¡£
+                    //å…¥å‚ä¸ºç©ºç›´æ¥continue
+                    //pageå¯¹è±¡ä¸è¿›è¡Œæ·±æ‹·è´ã€‚å¦‚æœä¸šåŠ¡åº”ç”¨åšåˆ†é¡µæŸ¥è¯¢æ—¶ï¼ŒæŸ¥è¯¢è¿‡åï¼Œä¼šå¾€å…¥å‚çš„pageå¯¹è±¡ä¸­setè¿›totalNumæˆ–è€…å…¶ä»–ä¿¡æ¯ã€‚
                     returnArgs[i] = arg;
                     continue;
                 }
@@ -95,7 +95,7 @@ public class MybatisPlusInvocationProcessor extends DefaultInvocationProcessor {
     }
 
     /**
-     * Èë²Î½øĞĞÉî¿½±´
+     * å…¥å‚è¿›è¡Œæ·±æ‹·è´
      *
      * @param arg
      * @return
@@ -105,7 +105,7 @@ public class MybatisPlusInvocationProcessor extends DefaultInvocationProcessor {
             String middleStr = JSONObject.toJSONString(arg);
             return JSONObject.parseObject(middleStr, arg.getClass());
         } catch (Exception e) {
-            //Õâ¸öµØ·½½øĞĞÈÕÖ¾´òÓ¡ÁË¡£ÓĞ¿ÉÄÜºÜÆµ·±Òì³£¡£±ÈÈçÈë²ÎÃ»ÓĞinstance¡£¼«ÓĞ¿ÉÄÜjson×ª»»Òì³£¡£Èç¹û×ª»»Òì³£Ö±½Ó²»¿½±´
+            //è¿™ä¸ªåœ°æ–¹è¿›è¡Œæ—¥å¿—æ‰“å°äº†ã€‚æœ‰å¯èƒ½å¾ˆé¢‘ç¹å¼‚å¸¸ã€‚æ¯”å¦‚å…¥å‚æ²¡æœ‰instanceã€‚ææœ‰å¯èƒ½jsonè½¬æ¢å¼‚å¸¸ã€‚å¦‚æœè½¬æ¢å¼‚å¸¸ç›´æ¥ä¸æ‹·è´
             return arg;
         }
     }
