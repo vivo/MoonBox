@@ -157,11 +157,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.vivo.jvm.sandbox</groupId>
-                <artifactId>sandbox-api</artifactId>
-                <version>${sandbox.api.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>

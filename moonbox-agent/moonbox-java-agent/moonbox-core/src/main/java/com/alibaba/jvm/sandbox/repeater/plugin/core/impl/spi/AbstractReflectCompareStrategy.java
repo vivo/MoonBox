@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -193,8 +192,15 @@ public abstract class AbstractReflectCompareStrategy extends AbstractMockStrateg
         String subUri = request.getIdentity().getUri();
         subUri = subUri.endsWith("/") ? subUri.substring(0, subUri.length() - 1) : subUri;
 
-        Map<String, FieldDiffConfig> diffConfigMap = diffConfigs.stream()
-                .collect(Collectors.toMap(FieldDiffConfig::getUri, a -> a, (k1, k2) -> k1));
+        //Map<String, FieldDiffConfig> diffConfigMap = diffConfigs.stream()
+        //        .collect(Collectors.toMap(FieldDiffConfig::getUri, a -> a, (k1, k2) -> k1));
+        //修复如果子调用如果忽略多个字段时，只有一个子调用字段忽略生效的问题。
+        Map<String, List<FieldDiffConfig>> diffConfigMap = Maps.newHashMap();
+        diffConfigs.forEach(fieldDiffConfig -> {
+            List<FieldDiffConfig> middleFieldDiffConfig = diffConfigMap.computeIfAbsent(fieldDiffConfig.getUri(),
+                k -> Lists.newArrayList());
+            middleFieldDiffConfig.add(fieldDiffConfig);
+        });
         log.info("generate comparator: subUri:{}", request.getIdentity().getUri());
         Pair<Boolean, String> pair = matchUri(diffConfigMap.keySet(), subUri);
         if (!pair.getLeft()) {

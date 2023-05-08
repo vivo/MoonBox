@@ -21,7 +21,7 @@
           "type": "keyword"
         },
         "mockInvocation": {
-          "type": "keyword"
+          "type": "text"
         },
         "recordTaskRunId": {
           "type": "keyword"
@@ -48,7 +48,7 @@
           "type": "keyword"
         },
         "replayResponse": {
-          "type": "keyword"
+          "type": "text"
         },
         "responseDiffResult": {
           "type": "keyword"

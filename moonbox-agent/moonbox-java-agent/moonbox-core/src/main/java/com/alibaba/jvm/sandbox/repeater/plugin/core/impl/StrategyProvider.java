@@ -21,12 +21,18 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author zhaoyb1990
  */
-class StrategyProvider {
+public class StrategyProvider {
 
-    private final Map<StrategyType, Map<String, MockStrategy>> strategyCached = new ConcurrentHashMap<>(2);
+    public static Map<StrategyType, Map<String, MockStrategy>> strategyCached = new ConcurrentHashMap<>(2);
 
-    private StrategyProvider() {
-        ServiceLoader<MockStrategy> strategies = ServiceLoader.load(MockStrategy.class, this.getClass().getClassLoader());
+    /**
+     * 初始化mock的分发类
+     *
+     * @param initClassLoader
+     */
+    public static void initStrategyCache(ClassLoader initClassLoader) {
+        ServiceLoader<MockStrategy> strategies = ServiceLoader.load(MockStrategy.class,
+            initClassLoader);
         for (MockStrategy strategy : strategies) {
             StrategyType type = strategy.type();
             Map<String, MockStrategy> group = strategyCached.get(type);
@@ -38,7 +44,7 @@ class StrategyProvider {
         }
     }
 
-    public MockStrategy provide(StrategyType type, String invokeType) {
+    public static MockStrategy provide(StrategyType type, String invokeType) {
         final Map<String, MockStrategy> group = strategyCached.get(type);
         if (MapUtils.isEmpty(group)) {
             throw new IllegalArgumentException("no strategy for : " + type.getType());
@@ -50,8 +56,8 @@ class StrategyProvider {
         return result;
     }
 
-    public static class Holder {
-        public static final StrategyProvider INSTANCE = new StrategyProvider();
-    }
+    //public static class Holder {
+    //    public static final StrategyProvider INSTANCE = new StrategyProvider();
+    //}
 
 }

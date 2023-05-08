@@ -1,5 +1,7 @@
 package com.alibaba.jvm.sandbox.repeater.plugin;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DateStringUtils {
 
     public static boolean isDateString(String str) {
@@ -24,10 +26,15 @@ public class DateStringUtils {
 
     /**
      * 将字符串里面时间给过滤掉....
+     *
      * @param data 要过滤字符串
      * @return 过滤结果
      */
     public static String replaceDateTimeToTips(String data) {
-        return data.replaceAll(DATETIME_REGEX1,"时间自动匹配").replaceAll(DATETIME_REGEX2,"时间自动匹配").replaceAll(DATETIME_REGEX3,"时间自动匹配");
+        if(StringUtils.isBlank(data)){
+            return data;
+        }
+        return data.replaceAll(DATETIME_REGEX1, "时间自动匹配").replaceAll(DATETIME_REGEX2, "时间自动匹配").replaceAll(
+            DATETIME_REGEX3, "时间自动匹配");
     }
 }

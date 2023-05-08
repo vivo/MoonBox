@@ -150,8 +150,18 @@ public class RecordConvert {
             // 转换普通子调用类型
             invocationVo = new InvocationVo();
         }
-        invocationVo.setResponse(responseObj);
-        invocationVo.setRequest(requestObjs);
+        if (InvokeType.REDIS.equals(invokeType)) {
+            if (responseObj instanceof byte[]) {
+                invocationVo.setResponse(new String((byte[])responseObj));
+            } else {
+                invocationVo.setResponse(responseObj);
+            }
+        } else {
+            invocationVo.setResponse(responseObj);
+        }
+        Object[] dealRequestObjects = RequestDataConvert.dealRequestObjects(requestObjs, invokeType,
+            invocationVo.getParameterTypes());
+        invocationVo.setRequest(dealRequestObjects);
         invocationVo.setType(invokeType.getInvokeName());
         invocationVo.setUri(uri);
         invocationVo.setInvokeId((Integer) invocation.get("invokeId"));
