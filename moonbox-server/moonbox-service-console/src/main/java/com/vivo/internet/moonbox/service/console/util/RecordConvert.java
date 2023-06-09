@@ -26,6 +26,9 @@ import com.vivo.internet.moonbox.service.console.vo.InvocationVo;
 import com.vivo.internet.moonbox.service.console.vo.RecordDetailVo;
 import com.vivo.internet.moonbox.service.data.model.record.RecordWrapperEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -112,6 +115,15 @@ public class RecordConvert {
         // 尝试将string类型转换成对象让前端展示
         if (responseObj instanceof String) {
             responseObj = HttpDataConvert.jsonStringToObj((String) responseObj);
+        }
+
+        //  解决类型为org.springframework.http.ResponseEntity时，header实际类型java.util.HashMap与定义类型org.springframework.http.HttpHeaders不一致的问题
+        if (responseObj instanceof ResponseEntity) {
+            HttpStatus statusCode = ((ResponseEntity<?>) responseObj).getStatusCode();
+            HttpHeaders headers = new HttpHeaders();
+            headers.putAll(((ResponseEntity<?>) responseObj).getHeaders());
+            Object body = ((ResponseEntity<?>) responseObj).getBody();
+            responseObj = new ResponseEntity(body, headers, statusCode);
         }
 
         InvocationVo invocationVo = null;
