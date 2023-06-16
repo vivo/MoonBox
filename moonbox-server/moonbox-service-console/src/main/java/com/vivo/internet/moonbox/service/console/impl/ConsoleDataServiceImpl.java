@@ -71,7 +71,7 @@ public class ConsoleDataServiceImpl implements ConsoleRecordDataService {
         pageRequest.setPageSize(dataListRequest.getPageSize());
         pageRequest.setPageNum(dataListRequest.getPageNum());
 
-        RecordDataListQuery listQuery = RecordDataListQuery.builder().recordUri(URLDecoder.decode(dataListRequest.getUri()))
+        RecordDataListQuery listQuery = RecordDataListQuery.builder().recordUri(dataListRequest.getUri() != null ? URLDecoder.decode(dataListRequest.getUri()) : null)
                 .startTime(dataListRequest.getStartTime()).traceId(dataListRequest.getTraceIdCondition())
                 .endTime(dataListRequest.getEndTime()).recordTaskRunId(dataListRequest.getTaskRunId()).build();
         pageRequest.setQueryParam(listQuery);
