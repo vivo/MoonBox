@@ -529,7 +529,7 @@ export default {
         pageSize: this.recordForm.pageSize4,
         taskRunId: row.taskRunId || taskRunId,
         traceIdCondition: this.recordForm.traceIdCondition,
-        uri: row.recordUri
+        uri: encodeURIComponent(row.recordUri)
       }
       this.loading = true
       API.record.getUriTaskDataList(params).then((res) => {

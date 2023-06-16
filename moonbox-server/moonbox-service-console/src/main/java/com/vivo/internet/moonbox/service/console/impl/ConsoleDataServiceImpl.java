@@ -15,6 +15,7 @@ limitations under the License.
  */
 package com.vivo.internet.moonbox.service.console.impl;
 
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,7 +71,7 @@ public class ConsoleDataServiceImpl implements ConsoleRecordDataService {
         pageRequest.setPageSize(dataListRequest.getPageSize());
         pageRequest.setPageNum(dataListRequest.getPageNum());
 
-        RecordDataListQuery listQuery = RecordDataListQuery.builder().recordUri(dataListRequest.getUri())
+        RecordDataListQuery listQuery = RecordDataListQuery.builder().recordUri(URLDecoder.decode(dataListRequest.getUri()))
                 .startTime(dataListRequest.getStartTime()).traceId(dataListRequest.getTraceIdCondition())
                 .endTime(dataListRequest.getEndTime()).recordTaskRunId(dataListRequest.getTaskRunId()).build();
         pageRequest.setQueryParam(listQuery);
