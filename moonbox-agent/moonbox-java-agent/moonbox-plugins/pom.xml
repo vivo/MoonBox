@@ -27,6 +27,7 @@
         <module>moonbox/spring-mongo-plugin</module>
         <module>moonbox/spring-session-plugin</module>
         <module>moonbox/universal-plugin</module>
+        <module>moonbox/motan-plugin</module>
 
         <module>repeater/dubbo-plugin</module>
         <module>repeater/hibernate-plugin</module>

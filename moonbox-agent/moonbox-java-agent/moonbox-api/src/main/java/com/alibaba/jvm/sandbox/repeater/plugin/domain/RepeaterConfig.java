@@ -6,10 +6,7 @@ package com.alibaba.jvm.sandbox.repeater.plugin.domain;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.vivo.internet.moonbox.common.api.model.DubboRecordInterface;
-import com.vivo.internet.moonbox.common.api.model.FieldDiffConfig;
-import com.vivo.internet.moonbox.common.api.model.HttpRecordInterface;
-import com.vivo.internet.moonbox.common.api.model.JavaRecordInterface;
+import com.vivo.internet.moonbox.common.api.model.*;
 
 /**
  * {@link RepeaterConfig} 基础配置项
@@ -56,6 +53,11 @@ public class RepeaterConfig implements java.io.Serializable{
      * 需要录制入口流量的 dubbo provider
      */
     private List<DubboRecordInterface> dubboEntrancePatterns = Lists.newArrayList();
+
+    /**
+     * 需要录制入口流量的 motan provider
+     */
+    private List<MotanRecordInterface> motanEntrancePatterns = Lists.newArrayList();
 
     /**
      * 需要录制java方法
@@ -224,6 +226,14 @@ public class RepeaterConfig implements java.io.Serializable{
 
     public void setFieldDiffConfigs(List<FieldDiffConfig> fieldDiffConfigs) {
         this.fieldDiffConfigs = fieldDiffConfigs;
+    }
+
+    public List<MotanRecordInterface> getMotanEntrancePatterns() {
+        return motanEntrancePatterns;
+    }
+
+    public void setMotanEntrancePatterns(List<MotanRecordInterface> motanEntrancePatterns) {
+        this.motanEntrancePatterns = motanEntrancePatterns;
     }
 
     @Override

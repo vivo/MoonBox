@@ -62,6 +62,12 @@ public class MoonboxRepeatCache {
             .maximumSize(4096)
             .expireAfterWrite(MOONBOX_CONTEXT.isDebug() ? 3600 : 80, TimeUnit.SECONDS).build();
 
+
+    private static final Cache<String, Object>  MOTAN_RESPONSE_CACHE = CacheBuilder
+            .newBuilder()
+            .maximumSize(4096)
+            .expireAfterWrite(MOONBOX_CONTEXT.isDebug() ? 3600 : 80, TimeUnit.SECONDS).build();
+
     /**
      * 判断当前请求是否是回放流量
      * <p>
@@ -164,6 +170,30 @@ public class MoonboxRepeatCache {
             return DUBBO_RESPONSE_CACHE.getIfPresent(traceId);
         } finally {
             DUBBO_RESPONSE_CACHE.invalidate(traceId);
+        }
+    }
+
+
+
+    public static void putMotanResponse(String repeaterTraceId, Object response) {
+        if (response != null) {
+            MOTAN_RESPONSE_CACHE.put(repeaterTraceId, response);
+        }
+    }
+
+    public static Object getMotanResponse(String repeaterTraceId) {
+        return StringUtils.isNotEmpty(repeaterTraceId) ? MOTAN_RESPONSE_CACHE.getIfPresent(repeaterTraceId) : null;
+    }
+
+    public static void removeMotanResponse(String repeaterTraceId) {
+        MOTAN_RESPONSE_CACHE.invalidate(repeaterTraceId);
+    }
+
+    public static Object getAndRemoveMotanResponse(String traceId) {
+        try {
+            return MOTAN_RESPONSE_CACHE.getIfPresent(traceId);
+        } finally {
+            MOTAN_RESPONSE_CACHE.invalidate(traceId);
         }
     }
 }
