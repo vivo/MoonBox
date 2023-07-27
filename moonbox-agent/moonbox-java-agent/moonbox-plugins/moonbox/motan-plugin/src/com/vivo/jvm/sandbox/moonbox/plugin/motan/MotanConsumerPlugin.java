@@ -18,7 +18,8 @@ import java.util.List;
 
 /**
  * motan 消费端的插件
- * 主要拦截RefererInvocationHandler#invoke 做录制和Mock
+ * 主要拦截AbstractReferer#call 做录制和Mock
+ *
  * @author dinglang
  */
 @MetaInfServices(InvokePlugin.class)
@@ -27,8 +28,8 @@ public class MotanConsumerPlugin extends AbstractInvokePluginAdapter {
     @Override
     protected List<EnhanceModel> getEnhanceModels() {
 
-        EnhanceModel onResponse = EnhanceModel.builder().classPattern("com.weibo.api.motan.proxy.RefererInvocationHandler")
-                .methodPatterns(EnhanceModel.MethodPattern.transform("invoke"))
+        EnhanceModel onResponse = EnhanceModel.builder().classPattern("com.weibo.api.motan.rpc.AbstractReferer")
+                .methodPatterns(EnhanceModel.MethodPattern.transform("call"))
                 .watchTypes(Event.Type.BEFORE, Event.Type.RETURN, Event.Type.THROWS)
                 .build();
 

@@ -17,11 +17,15 @@ public class MotanInvocation extends Invocation {
 
     private String protocol;
     private String version;
+    private String host;
+
+    private String port;
     private String address;
     private String group;
     private String interfaceName;
     private String methodName;
-    private String[] parameterTypes;
+
+    private String paramtersDesc;
     private Object[] parameters;
 
     public String getProtocol() {
@@ -72,14 +76,12 @@ public class MotanInvocation extends Invocation {
         this.methodName = methodName;
     }
 
-    @Override
-    public String[] getParameterTypes() {
-        return parameterTypes;
+    public String getParamtersDesc() {
+        return paramtersDesc;
     }
 
-    @Override
-    public void setParameterTypes(String[] parameterTypes) {
-        this.parameterTypes = parameterTypes;
+    public void setParamtersDesc(String paramtersDesc) {
+        this.paramtersDesc = paramtersDesc;
     }
 
     public Object[] getParameters() {
@@ -88,5 +90,21 @@ public class MotanInvocation extends Invocation {
 
     public void setParameters(Object[] parameters) {
         this.parameters = parameters;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
     }
 }

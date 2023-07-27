@@ -27,8 +27,8 @@ public class MotanProviderPlugin extends AbstractInvokePluginAdapter {
 
     @Override
     protected List<EnhanceModel> getEnhanceModels() {
-        EnhanceModel invoke = EnhanceModel.builder().classPattern("com.weibo.api.motan.rpc.DefaultProvider")
-                .methodPatterns(EnhanceModel.MethodPattern.transform("invoke"))
+        EnhanceModel invoke = EnhanceModel.builder().classPattern("com.weibo.api.motan.transport.ProviderMessageRouter")
+                .methodPatterns(EnhanceModel.MethodPattern.transform("call"))
                 .watchTypes(Event.Type.BEFORE, Event.Type.RETURN, Event.Type.THROWS).build();
 
         return Lists.newArrayList(invoke);

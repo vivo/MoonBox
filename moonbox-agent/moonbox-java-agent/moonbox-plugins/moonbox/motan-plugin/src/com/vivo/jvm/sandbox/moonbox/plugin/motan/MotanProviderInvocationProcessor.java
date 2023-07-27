@@ -27,18 +27,17 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
 
     @Override
     public Identity assembleIdentity(BeforeEvent event) {
-        //com.weibo.api.motan.rpc.DefaultProvider#invoke(Request request)
-        //invoke方法的参数
+        //com.weibo.api.motan.transport.ProviderMessageRouter#call(Request request, Provider<?> provider)
         Object[] argumentArray = event.argumentArray;
-        if (argumentArray != null && argumentArray.length == 1) {
+        if (argumentArray != null) {
             try {
                 Object request = argumentArray[0];
+                String interfaceName = (String)MethodUtils.invokeMethod(request,"getInterfaceName");
                 String methodName = (String) MethodUtils.invokeMethod(request, "getMethodName");
-                String interfaceName =(String) MethodUtils.invokeMethod(request, "getInterfaceName");
-                Object[] args = (Object[]) MethodUtils.invokeMethod(request, "getArguments");
-                return new Identity(InvokeType.MOTAN.name(), interfaceName, methodName + ParameterTypesUtil.getTypesStrByObjects(args), getExtra());
+                String paramsDesc =  ( String) MethodUtils.invokeMethod(request, "getParamtersDesc");
+                return new Identity(InvokeType.MOTAN.name(), interfaceName, methodName + paramsDesc, getExtra());
             } catch (Exception exception) {
-                MoonboxLogUtils.error("error occurred when assemble motan request", exception);
+                MoonboxLogUtils.error("error occurred when assemble motan identity", exception);
             }
         }
 

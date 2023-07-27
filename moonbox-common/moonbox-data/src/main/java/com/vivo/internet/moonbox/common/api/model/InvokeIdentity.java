@@ -34,7 +34,11 @@ public enum InvokeIdentity {
 
     JAVA_ENTRANCE("java-entrance", InvokeType.JAVA),
 
+    MOTAN_PROVIDER("motan-provider", InvokeType.MOTAN),
+
     DUBBO_CONSUMER("dubbo-consumer", InvokeType.DUBBO),
+
+    MOTAN_CONSUMER("motan-consumer", InvokeType.MOTAN),
 
     MYBATIS("mybatis", InvokeType.MYBATIS),
 
