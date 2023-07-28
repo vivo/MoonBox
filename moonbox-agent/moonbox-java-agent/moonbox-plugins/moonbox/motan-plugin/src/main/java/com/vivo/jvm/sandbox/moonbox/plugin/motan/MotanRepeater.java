@@ -65,8 +65,8 @@ public class MotanRepeater extends AbstractRepeater {
             // 使用服务
             CommonClient client = referer.getRef();
 
-            //泛化调用
-            client.call(motanInvocation.getMethodName(), motanInvocation.,Object.class);
+            //泛化调用(这种方式目前仅支持motan2协议)
+            client.call(motanInvocation.getMethodName(), motanInvocation.getParameters(),Object.class);
 
             return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
         } catch (Throwable e) {
