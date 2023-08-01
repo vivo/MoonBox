@@ -6,6 +6,7 @@ package com.vivo.jvm.sandbox.moonbox.plugin.motan;
 import com.alibaba.jvm.sandbox.api.event.BeforeEvent;
 import com.alibaba.jvm.sandbox.api.event.Event;
 import com.alibaba.jvm.sandbox.api.event.InvokeEvent;
+import com.alibaba.jvm.sandbox.api.event.ReturnEvent;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.cache.MoonboxRepeatCache;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.trace.Tracer;
@@ -27,6 +28,7 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
 
     @Override
     public Identity assembleIdentity(BeforeEvent event) {
+        MoonboxLogUtils.info("MotanProviderInvocationProcessor assembleIdentity");
         //com.weibo.api.motan.transport.ProviderMessageRouter#call(Request request, Provider<?> provider)
         Object[] argumentArray = event.argumentArray;
         if (argumentArray != null) {
@@ -43,5 +45,46 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
 
         return new Identity(InvokeType.MOTAN.name(), "unknown", "unknown", null);
     }
+
+    /**
+     * 组装请求参数
+     * @param event before事件
+     * @return
+     */
+    @Override
+    public Object[] assembleRequest(BeforeEvent event) {
+        Object[] argumentArray = event.argumentArray;
+        if (argumentArray != null) {
+            try {
+                Object request = argumentArray[0];
+                Object[] parameters = (Object[]) MethodUtils.invokeMethod(request, "getArguments");
+                return parameters;
+            } catch (Exception exception) {
+                MoonboxLogUtils.error("error occurred when assemble motan request", exception);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 组装响应结果
+     * @param event 事件
+     * @return
+     */
+    @Override
+    public Object assembleResponse(Event event) {
+        //在return事件中获取com.weibo.api.motan.transport.ProviderMessageRouter#call的返回值
+        if (event.type == Event.Type.RETURN) {
+            Object appResponse = ((ReturnEvent) event).object;
+            try {
+                return MethodUtils.invokeMethod(appResponse, "getValue");
+            } catch (Exception e) {
+                // ignore
+                MoonboxLogUtils.error("error occurred when assemble motan response", e);
+            }
+        }
+        return null;
+    }
+
 
 }

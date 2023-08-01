@@ -35,7 +35,7 @@ public class AppServiceImpl implements AppService {
     // todo 自行实现该逻辑获取应用列表
     @Override
     public List<String> getUserAppList(String userName) {
-        return Lists.newArrayList("moon-box-web", "repeater-console");
+        return Lists.newArrayList("DubboProvider","start","cloudflow-form-core","DemoRpcServer", "DemoRpcClient");
     }
 
     @Override

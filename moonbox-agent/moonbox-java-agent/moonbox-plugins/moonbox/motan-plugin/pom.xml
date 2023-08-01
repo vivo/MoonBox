@@ -12,6 +12,10 @@
 
     <artifactId>motan-plugin</artifactId>
 
+    <properties>
+        <motan.version>1.2.1</motan.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -26,10 +30,9 @@
         <dependency>
             <groupId>com.weibo</groupId>
             <artifactId>motan-core</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>

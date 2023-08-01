@@ -19,7 +19,7 @@ public class MotanInvocation extends Invocation {
     private String version;
     private String host;
 
-    private String port;
+    private Integer port;
     private String address;
     private String group;
     private String interfaceName;
@@ -100,11 +100,11 @@ public class MotanInvocation extends Invocation {
         this.host = host;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(String port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 }

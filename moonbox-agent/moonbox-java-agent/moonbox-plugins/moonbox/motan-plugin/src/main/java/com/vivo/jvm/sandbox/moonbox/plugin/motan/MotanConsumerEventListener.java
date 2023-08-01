@@ -35,10 +35,30 @@ public class MotanConsumerEventListener extends DefaultEventListener {
     }
 
 
+    /**
+     * 初始化调用器
+     * doBefore 的时候会被调用
+     * @param beforeEvent
+     *            before事件
+     * @return
+     */
     @Override
     protected Invocation initInvocation(BeforeEvent beforeEvent) {
+        MoonboxLogUtils.info("MotanConsumerEventListener initInvocation");
         MotanInvocation motanInvocation = null;
-        // AbstractReferer # call(Request request)
+        // com.weibo.api.motan.rpc.AbstractReferer # call(Request request)
+        int key = beforeEvent.argumentArray[0].hashCode();
+        Invocation cachedInvocation = MoonboxRecordCache.getInvocationIfPresent(key);
+        if (cachedInvocation == null) {
+            MoonboxLogUtils.warn("no valid cachedInvocation found in motan consumer  doBefore,type={},traceId={}",
+                    invokeType, Tracer.getTraceId());
+        } else if (!(cachedInvocation instanceof MotanInvocation)) {
+            MoonboxLogUtils.warn(
+                    "cachedInvocation found in motan consumer  doBefore is not a MotanInvocation,type={},traceId={}",
+                    invokeType, Tracer.getTraceId());
+        } else {
+            motanInvocation = (MotanInvocation) cachedInvocation;
+        }
         //方法参数
         Object[] argumentArray = beforeEvent.argumentArray;
         //AbstractReferer实例
@@ -46,12 +66,10 @@ public class MotanConsumerEventListener extends DefaultEventListener {
         if (argumentArray != null) {
             try {
                 Object request = argumentArray[0];
-                motanInvocation = new MotanInvocation();
-
                 String interfaceName = (String)MethodUtils.invokeMethod(request,"getInterfaceName");
                 String methodName = (String) MethodUtils.invokeMethod(request, "getMethodName");
                 motanInvocation.setInterfaceName(interfaceName);
-                motanInvocation.setInterfaceName(methodName);
+                motanInvocation.setMethodName(methodName);
                 //请求参数和参数类型描述
                 Object[] parameters = (Object[]) MethodUtils.invokeMethod(request, "getArguments");
                 String paramtersDesc = (String) MethodUtils.invokeMethod(request, "getParamtersDesc");
@@ -62,7 +80,7 @@ public class MotanConsumerEventListener extends DefaultEventListener {
                 Object url = MethodUtils.invokeMethod(referer,"getUrl");
                 String protocol = (String) MethodUtils.invokeMethod(url,"getProtocol");
                 String host = (String) MethodUtils.invokeMethod(url,"getHost");
-                String port = (String) MethodUtils.invokeMethod(url,"getPort");
+                Integer port = (Integer) MethodUtils.invokeMethod(url,"getPort");
                 String address = host+":"+port;
                 motanInvocation.setProtocol(protocol);
                 motanInvocation.setHost(host);
@@ -83,6 +101,7 @@ public class MotanConsumerEventListener extends DefaultEventListener {
 
     @Override
     protected void initContext(Event event) {
+        MoonboxLogUtils.info("MotanConsumerEventListener initContext");
         if (event.type == Event.Type.BEFORE) {
             BeforeEvent beforeEvent = (BeforeEvent) event;
             if (entrance) {
@@ -106,5 +125,21 @@ public class MotanConsumerEventListener extends DefaultEventListener {
                 MoonboxLogUtils.error("initContext occur exception", e);
             }
         }
+    }
+
+    @Override
+    protected void doBefore(BeforeEvent event) throws ProcessControlException {
+        MoonboxLogUtils.info("MotanConsumerEventListener doBefore");
+        if (event.javaClassName.equals("com.weibo.api.motan.rpc.AbstractReferer")
+                && event.javaMethodName.contains("call")
+                && !MoonboxRepeatCache.isRepeatFlow(Tracer.getTraceId())) {
+            MoonboxLogUtils.info("MotanConsumerEventListener,is not RepeatFlow ，exec doBefore");
+            MotanInvocation motanInvocation = new MotanInvocation();
+            motanInvocation.setStart(System.currentTimeMillis());
+            int key = event.argumentArray[0].hashCode();
+            MoonboxRecordCache.cacheInvocation(key, motanInvocation);
+            //return;
+        }
+        super.doBefore(event);
     }
 }

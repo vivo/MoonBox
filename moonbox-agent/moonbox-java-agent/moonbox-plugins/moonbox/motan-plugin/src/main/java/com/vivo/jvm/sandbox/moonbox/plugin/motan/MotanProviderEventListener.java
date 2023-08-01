@@ -31,21 +31,40 @@ public class MotanProviderEventListener extends DefaultEventListener {
         super(invokeType, entrance, listener, processor);
     }
 
+    /**
+     * 初始化调用器
+     * doBefore 的时候会被调用
+     * @param beforeEvent
+     *            before事件
+     * @return
+     */
     @Override
     protected Invocation initInvocation(BeforeEvent beforeEvent) {
+        MoonboxLogUtils.info("MotanProviderEventListener initInvocation");
         //com.weibo.api.motan.transport.ProviderMessageRouter#call(Request request, Provider<?> provider)
         MotanInvocation motanInvocation = null;
         Object[] argumentArray = beforeEvent.argumentArray;
-        //AbstractReferer实例
-        Object referer = beforeEvent.target;
+
+        int key = beforeEvent.argumentArray[0].hashCode();
+        Invocation cachedInvocation = MoonboxRecordCache.getInvocationIfPresent(key);
+        if (cachedInvocation == null) {
+            MoonboxLogUtils.warn("no valid cachedInvocation found in motan consumer  doBefore,type={},traceId={}",
+                    invokeType, Tracer.getTraceId());
+        } else if (!(cachedInvocation instanceof MotanInvocation)) {
+            MoonboxLogUtils.warn(
+                    "cachedInvocation found in motan consumer  doBefore is not a MotanInvocation,type={},traceId={}",
+                    invokeType, Tracer.getTraceId());
+        } else {
+            motanInvocation = (MotanInvocation) cachedInvocation;
+        }
         if (argumentArray != null) {
             try {
                 Object request = argumentArray[0];
-                motanInvocation = new MotanInvocation();
+                Object provider = argumentArray[1];
                 String interfaceName = (String) MethodUtils.invokeMethod(request,"getInterfaceName");
                 String methodName = (String) MethodUtils.invokeMethod(request, "getMethodName");
                 motanInvocation.setInterfaceName(interfaceName);
-                motanInvocation.setInterfaceName(methodName);
+                motanInvocation.setMethodName(methodName);
                 //请求参数和参数类型描述
                 Object[] parameters = (Object[]) MethodUtils.invokeMethod(request, "getArguments");
                 String paramtersDesc = (String) MethodUtils.invokeMethod(request, "getParamtersDesc");
@@ -53,11 +72,11 @@ public class MotanProviderEventListener extends DefaultEventListener {
                 motanInvocation.setParamtersDesc(paramtersDesc);
                 //从 AbstractReferer对象中获取URL对象 (或者可以读取serviceUrl字段)
                 //motan://172.22.19.73:8002/com.weibo.motan.demo.service.MotanDemoService?group=motan-demo-rpc
-                Object url = MethodUtils.invokeMethod(referer,"getUrl");
+                Object url = MethodUtils.invokeMethod(provider,"getUrl");
                 String protocol = (String) MethodUtils.invokeMethod(url,"getProtocol");
                 String host = (String) MethodUtils.invokeMethod(url,"getHost");
-                String port = (String) MethodUtils.invokeMethod(url,"getPort");
-                String address = host+":"+port;
+                Integer port = (Integer) MethodUtils.invokeMethod(url,"getPort");
+                String address = host + ":" + port;
                 motanInvocation.setProtocol(protocol);
                 motanInvocation.setHost(host);
                 motanInvocation.setPort(port);
@@ -77,6 +96,7 @@ public class MotanProviderEventListener extends DefaultEventListener {
 
     @Override
     protected void initContext(Event event) {
+        MoonboxLogUtils.info("MotanProviderEventListener initInvocation");
         if (event.type == Event.Type.BEFORE) {
             BeforeEvent beforeEvent = (BeforeEvent) event;
             if (entrance) {
@@ -101,4 +121,28 @@ public class MotanProviderEventListener extends DefaultEventListener {
             }
         }
     }
+
+    @Override
+    protected void doBefore(BeforeEvent event) throws ProcessControlException {
+        MoonboxLogUtils.info("MotanProviderEventListener doBefore");
+        if (event.javaClassName.equals("com.weibo.api.motan.transport.ProviderMessageRouter")
+                && event.javaMethodName.contains("call")
+                && !MoonboxRepeatCache.isRepeatFlow(Tracer.getTraceId())) {
+            MoonboxLogUtils.info("MotanProviderEventListener,is not RepeatFlow ，exec doBefore");
+            MotanInvocation motanInvocation = new MotanInvocation();
+            motanInvocation.setRequest(processor.assembleRequest(event));
+            try {
+                SerializerWrapper.inTimeSerialize(motanInvocation);
+            } catch (SerializeException e) {
+                MoonboxLogUtils.error("MotanProviderEventListener exec doBefore serialize error",e);
+            }
+            motanInvocation.setStart(System.currentTimeMillis());
+            int key = event.argumentArray[0].hashCode();
+            MoonboxRecordCache.cacheInvocation(key, motanInvocation);
+            //return;
+        }
+        super.doBefore(event);
+    }
+
+
 }

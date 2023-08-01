@@ -60,7 +60,7 @@ public class TemplateCreateReq {
             if (recordAgentConfig.getRecordTaskDuration() <= 0) {
                 return CheckerSupported.CheckResult.builder().result(false).message("运行时间必须要大于0").build();
             }
-            if (AssertUtil.allOfNull(recordAgentConfig.getDubboRecordInterfaces(),
+            if (AssertUtil.allOfNull(recordAgentConfig.getDubboRecordInterfaces(),recordAgentConfig.getMotanRecordInterfaces(),
                     recordAgentConfig.getHttpRecordInterfaces(), recordAgentConfig.getJavaRecordInterfaces())) {
                 return CheckerSupported.CheckResult.builder().result(false).message("至少需要配置一个采集接口").build();
             }

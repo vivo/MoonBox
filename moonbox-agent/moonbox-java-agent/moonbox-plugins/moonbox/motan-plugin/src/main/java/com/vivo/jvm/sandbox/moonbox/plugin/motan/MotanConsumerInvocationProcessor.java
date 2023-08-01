@@ -37,6 +37,7 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
      */
     @Override
     public Identity assembleIdentity(BeforeEvent event) {
+        MoonboxLogUtils.info("MotanConsumerInvocationProcessor assembleIdentity");
         // AbstractReferer # call(Request request)
         Object[] argumentArray = event.argumentArray;
         if (argumentArray != null) {
@@ -74,21 +75,6 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
         return null;
     }
 
-    /**
-     * 组装响应结果
-     * @param event 事件
-     * @return
-     */
-    @Override
-    public Object assembleResponse(Event event) {
-        //只关心返回事件
-        if (event.type == Event.Type.RETURN) {
-            Object result = ((ReturnEvent) event).object;
-            //TODO 这里需要注意考虑异步调用的情况，如果是ResponseFuture可能有问题
-            return result;
-        }
-        return null;
-    }
 
     /**
      * 组装需要返回的mockResponse
@@ -100,6 +86,7 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
     public Object assembleMockResponse(BeforeEvent event, Invocation invocation) {
         Object response = invocation.getResponse();
         //TODO 构造返回结果
+        System.out.println("如果是motan消费者子调用，且是回放场景，才会执行到这里！");
         return response;
     }
 }
