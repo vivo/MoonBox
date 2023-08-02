@@ -55,7 +55,9 @@ public class MotanRepeater extends AbstractRepeater {
         // 配置注册中心直连调用
         RegistryConfig registry = new RegistryConfig();
         registry.setRegProtocol("direct");
-        registry.setAddress(motanInvocation.getAddress());
+        //这里是回放场景，直接配置成请求本机的
+        //registry.setAddress(motanInvocation.getAddress());
+        registry.setAddress("127.0.0.1:"+registry.getPort());
         referer.setRegistry(registry);
 
         // 配置RPC协议
@@ -81,7 +83,7 @@ public class MotanRepeater extends AbstractRepeater {
                 //泛化调用(这种方式目前仅支持motan2协议)
                 client.call(motanInvocation.getMethodName(), motanInvocation.getParameters(), Object.class);
             } else if (motanInvocation.getProtocol().equals("motan")) {
-                //motan原生协议
+                //motan 原生协议
                 client.callV1(motanInvocation.getMethodName(), motanInvocation.getParameters(), motanInvocation.getParamtersDesc(), Object.class);
             }
             return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
@@ -90,7 +92,7 @@ public class MotanRepeater extends AbstractRepeater {
             return null;
         } finally {
             MoonboxLogUtils.info("generate motan call end");
-            MoonboxRepeatCache.removeDubboResponse(context.getTraceId());
+            MoonboxRepeatCache.removeMotanResponse(context.getTraceId());
             MoonboxRepeatCache.removeRepeatContext(context.getTraceId());
             Thread.currentThread().setContextClassLoader(swap);
         }
