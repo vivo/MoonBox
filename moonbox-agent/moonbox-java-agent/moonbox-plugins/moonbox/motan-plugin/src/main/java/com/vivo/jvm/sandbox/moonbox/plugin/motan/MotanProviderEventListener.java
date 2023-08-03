@@ -6,20 +6,28 @@ import com.alibaba.jvm.sandbox.api.event.Event;
 import com.alibaba.jvm.sandbox.repeater.plugin.api.InvocationListener;
 import com.alibaba.jvm.sandbox.repeater.plugin.api.InvocationProcessor;
 import com.alibaba.jvm.sandbox.repeater.plugin.common.Constants;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.ContextResourceClear;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.cache.MoonboxRecordCache;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.cache.MoonboxRepeatCache;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultEventListener;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.MoonboxRecordIndicatorManager;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.model.MoonboxContext;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.serialize.SerializeException;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.trace.TraceGenerator;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.trace.Tracer;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.MoonboxLogUtils;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.UriSampleRateRandomUtils;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.wrapper.SerializerWrapper;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.DubboInvocation;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.MotanInvocation;
+import com.vivo.internet.moonbox.common.api.model.DubboRecordInterface;
 import com.vivo.internet.moonbox.common.api.model.Invocation;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
+import com.vivo.internet.moonbox.common.api.model.MotanRecordInterface;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -149,5 +157,70 @@ public class MotanProviderEventListener extends DefaultEventListener {
         super.doBefore(event);
     }
 
+    /**
+     * 采样比率
+     * @param event
+     * @return
+     */
+    @Override
+    protected boolean sample(Event event) {
+        // 如果是录制流量而且是入口请求，则在BeforeEvent触发时进行采样率计算
+        if (!MoonboxRepeatCache.isRepeatFlow(Tracer.getTraceId()) && entrance && event instanceof BeforeEvent) {
+            try {
+                BeforeEvent beforeEvent = (BeforeEvent) event;
+                String javaMethodName = beforeEvent.javaMethodName;
+                if (("call").equals(javaMethodName)) {
+                    // 系统还没启动成功，不录制
+                    if (!MoonboxContext.getInstance().isStartEnd()) {
+                        return false;
+                    }
+                    List<MotanRecordInterface> patterns = MoonboxContext.getInstance().getConfig()
+                            .getMotanEntrancePatterns();
+                    //com.weibo.api.motan.transport.ProviderMessageRouter#call(Request request, Provider<?> provider)
+                    Object[] argumentArray = beforeEvent.argumentArray;
+                    Object request = argumentArray[0];
+                    Object provider = argumentArray[1];
+                    String interfaceName = (String) MethodUtils.invokeMethod(request,"getInterfaceName");
+                    String methodName = (String) MethodUtils.invokeMethod(request, "getMethodName");
+                    // 接口匹配，采样率计算
+                    if (!matchRequestUriAndSample(patterns, interfaceName, methodName)) {
+                        ContextResourceClear.sampleFalse();
+                        return false;
+                    }
+                    // 计算客户端是否采集达到了数量限制
+                    String uri = processor.assembleIdentity((BeforeEvent) event).getUri();
+                    MoonboxRecordIndicatorManager.getInstance().setRecordingUri(uri);
+                    Tracer.getContext().setSampled(true);
+                    Tracer.getContext().setRecordEntranceUri(uri);
+                    return true;
+                }
+            }catch (Exception exception){
+                MoonboxLogUtils.error("MotanProviderEventListener exec sample error",exception);
+            }
+        }
+        //回放的流量直接跳过
+        return super.sample(event);
+    }
 
+    private boolean matchRequestUriAndSample(List<MotanRecordInterface> patterns, String interfaceName,
+                                             String methodName) {
+        if (CollectionUtils.isEmpty(patterns)) {
+            return false;
+        }
+        for (MotanRecordInterface pattern : patterns) {
+            if (interfaceName.matches(pattern.getInterfaceName()) && methodName.matches(pattern.getMethodName())) {
+                int random = UriSampleRateRandomUtils.getRandom(pattern.getUniqueKey()).nextInt(10000);
+                // 采样判断
+                if (random < Integer.parseInt(pattern.getSampleRate())) {
+                    // 数量判断
+                    if (!MoonboxRecordIndicatorManager.getInstance().canRecord(pattern.getUniqueKey())) {
+                        ContextResourceClear.sampleFalse();
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

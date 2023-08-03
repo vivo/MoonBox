@@ -78,6 +78,7 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
 
     /**
      * 组装需要返回的mockResponse
+     * doBefore执行后，发现是回放流量就会执行doMock，doMock判断是非入口调用且需要Mock的就会执行到这里
      * @param event      before事件
      * @param invocation 调用信息
      * @return
@@ -85,7 +86,7 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
     @Override
     public Object assembleMockResponse(BeforeEvent event, Invocation invocation) {
         Object response = invocation.getResponse();
-        //TODO 构造返回结果
+        //TODO 这里是直接返回的，可能有问题，待测试验证
         System.out.println("如果是motan消费者子调用，且是回放场景，才会执行到这里！");
         return response;
     }

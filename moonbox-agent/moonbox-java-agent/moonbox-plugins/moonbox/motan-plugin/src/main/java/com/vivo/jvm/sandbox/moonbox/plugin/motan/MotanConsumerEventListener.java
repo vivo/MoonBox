@@ -143,21 +143,4 @@ public class MotanConsumerEventListener extends DefaultEventListener {
         super.doBefore(event);
     }
 
-    /**
-     * 采样比率
-     * @param event
-     * @return
-     */
-    @Override
-    protected boolean sample(Event event) {
-        // 如果是录制流量，入口请求 则进行采样率计算
-        if (!MoonboxRepeatCache.isRepeatFlow(Tracer.getTraceId()) && entrance && event instanceof BeforeEvent) {
-            try {
-
-            }catch (Exception exception){
-
-            }
-        }
-        return super.sample(event);
-    }
 }
