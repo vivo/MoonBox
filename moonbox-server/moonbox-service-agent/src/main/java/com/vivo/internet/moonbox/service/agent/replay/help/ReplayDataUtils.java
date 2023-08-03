@@ -53,6 +53,7 @@ public class ReplayDataUtils {
 
         try {
             if (response instanceof String) {
+                //TODO 这里如果字符串，里面不带转义字符的，会引发反序列化异常
                 return JSON.parseObject((String) response, Object.class);
             }
             // remove 'class' field imported by dubbo generic

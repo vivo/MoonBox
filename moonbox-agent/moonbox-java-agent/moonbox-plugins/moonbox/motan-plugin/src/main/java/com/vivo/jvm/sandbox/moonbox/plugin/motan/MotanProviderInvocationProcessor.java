@@ -11,10 +11,8 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.cache.MoonboxRepeatCache;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.trace.Tracer;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.MoonboxLogUtils;
-import com.alibaba.jvm.sandbox.repeater.plugin.utils.ParameterTypesUtil;
 import com.vivo.internet.moonbox.common.api.model.Identity;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 /**
@@ -77,7 +75,8 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
         if (event.type == Event.Type.RETURN) {
             Object appResponse = ((ReturnEvent) event).object;
             try {
-                return MethodUtils.invokeMethod(appResponse, "getValue");
+                Object result = MethodUtils.invokeMethod(appResponse, "getValue");
+                    return result;
             } catch (Exception e) {
                 // ignore
                 MoonboxLogUtils.error("error occurred when assemble motan response", e);
@@ -85,6 +84,5 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
         }
         return null;
     }
-
 
 }

@@ -94,9 +94,14 @@ public class MotanProviderEventListener extends DefaultEventListener {
         return motanInvocation;
     }
 
+    /**
+     * 初始化上下文信息
+     * 在DefaultEventListener#onEvent() 刚执行时被处理
+     * @param event
+     */
     @Override
     protected void initContext(Event event) {
-        MoonboxLogUtils.info("MotanProviderEventListener initInvocation");
+        MoonboxLogUtils.info("MotanProviderEventListener initContext");
         if (event.type == Event.Type.BEFORE) {
             BeforeEvent beforeEvent = (BeforeEvent) event;
             if (entrance) {

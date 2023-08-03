@@ -55,9 +55,9 @@ public class MotanRepeater extends AbstractRepeater {
         // 配置注册中心直连调用
         RegistryConfig registry = new RegistryConfig();
         registry.setRegProtocol("direct");
-        //这里是回放场景，直接配置成请求本机的
+        //这里是回放场景，直接配置成请求本机的方式
         //registry.setAddress(motanInvocation.getAddress());
-        registry.setAddress("127.0.0.1:"+registry.getPort());
+        registry.setAddress("127.0.0.1:" + motanInvocation.getPort());
         referer.setRegistry(registry);
 
         // 配置RPC协议
@@ -76,26 +76,28 @@ public class MotanRepeater extends AbstractRepeater {
             RpcContext rpcContext = RpcContext.getContext();
             rpcContext.setRpcAttachment(Constants.HEADER_TRACE_ID_X, context.getTraceId());
 
-            // 使用服务
+            // 使用泛化调用方式直接回放流量
             CommonClient client = referer.getRef();
 
             if (motanInvocation.getProtocol().equals("motan2")) {
                 //泛化调用(这种方式目前仅支持motan2协议)
-                client.call(motanInvocation.getMethodName(), motanInvocation.getParameters(), Object.class);
+             return  client.call(motanInvocation.getMethodName(), motanInvocation.getParameters(), Object.class);
             } else if (motanInvocation.getProtocol().equals("motan")) {
                 //motan 原生协议
-                client.callV1(motanInvocation.getMethodName(), motanInvocation.getParameters(), motanInvocation.getParamtersDesc(), Object.class);
+                return client.callV1(motanInvocation.getMethodName(), motanInvocation.getParameters(), motanInvocation.getParamtersDesc(), Object.class);
             }
-            return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
+            //直接返缓存中的（回录制时候的结果）
+            //return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
         } catch (Throwable e) {
             MoonboxLogUtils.error("motan回放失败", e);
-            return null;
         } finally {
             MoonboxLogUtils.info("generate motan call end");
             MoonboxRepeatCache.removeMotanResponse(context.getTraceId());
             MoonboxRepeatCache.removeRepeatContext(context.getTraceId());
             Thread.currentThread().setContextClassLoader(swap);
         }
+
+        return null;
     }
 
     @Override

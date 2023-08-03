@@ -89,4 +89,25 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
         System.out.println("如果是motan消费者子调用，且是回放场景，才会执行到这里！");
         return response;
     }
+
+    /**
+     * 组装响应结果
+     * @param event 事件
+     * @return
+     */
+    @Override
+    public Object assembleResponse(Event event) {
+        //在return事件中获取com.weibo.api.motan.rpc.AbstractRefererr#call的返回值
+        if (event.type == Event.Type.RETURN) {
+            Object appResponse = ((ReturnEvent) event).object;
+            try {
+                Object result = MethodUtils.invokeMethod(appResponse, "getValue");
+                return result;
+            } catch (Exception e) {
+                // ignore
+                MoonboxLogUtils.error("error occurred when assemble motan response", e);
+            }
+        }
+        return null;
+    }
 }
