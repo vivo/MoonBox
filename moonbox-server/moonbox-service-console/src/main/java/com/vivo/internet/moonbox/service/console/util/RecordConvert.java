@@ -20,10 +20,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.google.common.base.Joiner;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
 import com.vivo.internet.moonbox.common.api.util.SerializerWrapper;
-import com.vivo.internet.moonbox.service.console.vo.DubboInvocationVo;
-import com.vivo.internet.moonbox.service.console.vo.HttpInvocationVo;
-import com.vivo.internet.moonbox.service.console.vo.InvocationVo;
-import com.vivo.internet.moonbox.service.console.vo.RecordDetailVo;
+import com.vivo.internet.moonbox.service.console.vo.*;
 import com.vivo.internet.moonbox.service.data.model.record.RecordWrapperEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -136,7 +133,17 @@ public class RecordConvert {
             ((DubboInvocationVo) invocationVo).setInterfaceName((String) invocation.get("interfaceName"));
             ((DubboInvocationVo) invocationVo).setMethodName((String) invocation.get("methodName"));
 
-        } else if (InvokeType.HTTP.equals(invokeType)) {
+        } else if (InvokeType.MOTAN.equals(invokeType)) {
+            // 转换motan类型
+            invocationVo = new MotanInvocationVo();
+            ((MotanInvocationVo) invocationVo).setAddress((String) invocation.get("address"));
+            ((MotanInvocationVo) invocationVo).setVersion((String) invocation.get("version"));
+            ((MotanInvocationVo) invocationVo).setGroup((String) invocation.get("group"));
+            ((MotanInvocationVo) invocationVo).setInterfaceName((String) invocation.get("interfaceName"));
+            ((MotanInvocationVo) invocationVo).setMethodName((String) invocation.get("methodName"));
+
+        }
+        else if (InvokeType.HTTP.equals(invokeType)) {
             // 转换http这种入口流量类型类型
             invocationVo = new HttpInvocationVo();
             String httpBody = (String) invocation.get("body");

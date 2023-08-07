@@ -202,7 +202,7 @@ public class ReplayDataServiceImpl extends AbstractElasticService implements Rep
         GetRequest getRequest = new GetRequest(INDEX_NAME, replayTraceId);
         try {
             GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
-            //TODO 这里面ESClient返回结果getSourceAsString后是带转义字符的，fastjson反序列化后也带转义字符，会导致对比结果详情页
+            //TODO 这里面ESClient返回结果getSourceAsString后是带转义字符的，fastjson反序列化后也带转义字符，会导致对比结果详情页误导
             return RepeatModelEntityConverter
                     .build(JSON.parseObject(getResponse.getSourceAsString(), EsReplayEntity.class));
 
