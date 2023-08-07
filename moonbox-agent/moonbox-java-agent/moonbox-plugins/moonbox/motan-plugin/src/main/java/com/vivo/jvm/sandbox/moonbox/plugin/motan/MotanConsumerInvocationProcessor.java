@@ -88,8 +88,6 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
     @Override
     public Object assembleMockResponse(BeforeEvent event, Invocation invocation) {
         Object response = invocation.getResponse();
-        //TODO 这里是直接返回的，可能有问题，待测试验证
-        System.out.println("如果是motan消费者子调用，且是回放场景，才会执行到这里！");
         return response;
     }
 
@@ -105,6 +103,7 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
             Object appResponse = ((ReturnEvent) event).object;
             try {
                 Object value = MethodUtils.invokeMethod(appResponse, "getValue");
+                //需要反序列化
                 value = ((DeserializableObject) value).deserialize(Object.class);
                 return value;
             } catch (Exception e) {

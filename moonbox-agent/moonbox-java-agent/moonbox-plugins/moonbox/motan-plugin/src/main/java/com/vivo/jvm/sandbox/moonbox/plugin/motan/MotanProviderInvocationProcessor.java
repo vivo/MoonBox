@@ -77,7 +77,6 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
             Object appResponse = ((ReturnEvent) event).object;
             try {
                 Object value = MethodUtils.invokeMethod(appResponse, "getValue");
-                value = ((DeserializableObject) value).deserialize(Object.class);
                 return value;
             } catch (Exception e) {
                 // ignore

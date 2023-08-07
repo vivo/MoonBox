@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <template>
   <div>
-    <v-dubbo-flow :traceId="traceId" :taskRunId="taskRunId" :closeType="1" :key="traceId"></v-dubbo-flow>
+    <v-motan-flow :traceId="traceId" :taskRunId="taskRunId" :closeType="1" :key="traceId"></v-motan-flow>
   </div>
 </template>
 
