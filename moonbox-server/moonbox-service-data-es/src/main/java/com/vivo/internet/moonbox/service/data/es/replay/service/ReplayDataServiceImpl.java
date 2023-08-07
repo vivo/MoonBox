@@ -32,6 +32,7 @@ import com.vivo.internet.moonbox.service.data.service.ReplayDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -202,9 +203,14 @@ public class ReplayDataServiceImpl extends AbstractElasticService implements Rep
         GetRequest getRequest = new GetRequest(INDEX_NAME, replayTraceId);
         try {
             GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
-            //TODO 这里面ESClient返回结果getSourceAsString后是带转义字符的，fastjson反序列化后也带转义字符，会导致对比结果详情页误导
+            //TODO 这里面ESClient返回结果getSourceAsString后是带转义字符的(存进去就带转义字符了)，fastjson反序列化后也带转义字符，会导致对比结果详情页误导
+
+            EsReplayEntity esReplayEntity = JSON.parseObject(getResponse.getSourceAsString(), EsReplayEntity.class);
+            //去转义字符,去""
+            //esReplayEntity.setReplayResponse(StringEscapeUtils.unescapeJava(esReplayEntity.getReplayResponse()));
+            esReplayEntity.setReplayResponse(esReplayEntity.getReplayResponse().replace("\"", ""));
             return RepeatModelEntityConverter
-                    .build(JSON.parseObject(getResponse.getSourceAsString(), EsReplayEntity.class));
+                    .build(esReplayEntity);
 
         } catch (Exception e) {
             log.error("[ elasticsearch ] getReplayEntity error!traceId={}", replayTraceId, e);
