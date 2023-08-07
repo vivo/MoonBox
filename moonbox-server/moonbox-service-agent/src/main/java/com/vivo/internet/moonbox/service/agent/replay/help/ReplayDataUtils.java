@@ -15,19 +15,12 @@ limitations under the License.
  */
 package com.vivo.internet.moonbox.service.agent.replay.help;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.fastjson.JSON;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
 
 /**
  * ReplayDataUtils

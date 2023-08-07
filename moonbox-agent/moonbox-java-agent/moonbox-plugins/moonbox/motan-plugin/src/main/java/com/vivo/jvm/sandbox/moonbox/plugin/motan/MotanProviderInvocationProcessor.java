@@ -13,6 +13,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.trace.Tracer;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.MoonboxLogUtils;
 import com.vivo.internet.moonbox.common.api.model.Identity;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
+import com.weibo.api.motan.serialize.DeserializableObject;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 /**
@@ -75,8 +76,9 @@ class MotanProviderInvocationProcessor extends DefaultInvocationProcessor {
         if (event.type == Event.Type.RETURN) {
             Object appResponse = ((ReturnEvent) event).object;
             try {
-                Object result = MethodUtils.invokeMethod(appResponse, "getValue");
-                    return result;
+                Object value = MethodUtils.invokeMethod(appResponse, "getValue");
+                value = ((DeserializableObject) value).deserialize(Object.class);
+                return value;
             } catch (Exception e) {
                 // ignore
                 MoonboxLogUtils.error("error occurred when assemble motan response", e);

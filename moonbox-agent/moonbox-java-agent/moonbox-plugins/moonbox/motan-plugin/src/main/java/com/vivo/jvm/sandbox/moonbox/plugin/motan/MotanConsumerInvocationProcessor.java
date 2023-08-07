@@ -13,6 +13,8 @@ import com.vivo.internet.moonbox.common.api.model.Identity;
 import com.vivo.internet.moonbox.common.api.model.Invocation;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
 import com.weibo.api.motan.rpc.AbstractReferer;
+import com.weibo.api.motan.rpc.Response;
+import com.weibo.api.motan.serialize.DeserializableObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -98,12 +100,13 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
      */
     @Override
     public Object assembleResponse(Event event) {
-        //在return事件中获取com.weibo.api.motan.rpc.AbstractRefererr#call的返回值
+        //在return事件中获取com.weibo.api.motan.rpc.AbstractReferer#call的返回值
         if (event.type == Event.Type.RETURN) {
             Object appResponse = ((ReturnEvent) event).object;
             try {
-                Object result = MethodUtils.invokeMethod(appResponse, "getValue");
-                return result;
+                Object value = MethodUtils.invokeMethod(appResponse, "getValue");
+                value = ((DeserializableObject) value).deserialize(Object.class);
+                return value;
             } catch (Exception e) {
                 // ignore
                 MoonboxLogUtils.error("error occurred when assemble motan response", e);

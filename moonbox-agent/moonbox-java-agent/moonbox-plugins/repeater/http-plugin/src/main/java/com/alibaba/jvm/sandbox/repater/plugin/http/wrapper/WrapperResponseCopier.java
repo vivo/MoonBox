@@ -66,4 +66,9 @@ public class WrapperResponseCopier extends HttpServletResponseWrapper {
             return new byte[0];
         }
     }
+
+    @Override
+    public String getCharacterEncoding() {
+        return "utf-8";
+    }
 }
