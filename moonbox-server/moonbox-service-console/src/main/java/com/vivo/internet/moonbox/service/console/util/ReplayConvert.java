@@ -221,8 +221,8 @@ public class ReplayConvert {
             return null;
         }
         List<ReplayDiffVo> replayDiffVoList = differences.stream()
-                .map(difference -> ReplayDiffVo.builder().currentData(objToJson(difference.getLeft()))
-                        .originData(objToJson(difference.getRight())).reason(difference.getReason())
+                .map(difference -> ReplayDiffVo.builder().originData(objToJson(difference.getLeft()))
+                        .currentData(objToJson(difference.getRight())).reason(difference.getReason())
                         .path(difference.getNodeName()).diffType(difference.getType().name()).build())
                 .collect(Collectors.toList());
         return replayDiffVoList;

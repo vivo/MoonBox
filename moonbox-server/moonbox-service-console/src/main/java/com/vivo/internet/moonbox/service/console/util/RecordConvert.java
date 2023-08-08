@@ -178,6 +178,13 @@ public class RecordConvert {
         } else {
             invocationVo.setResponse(responseObj);
         }
+         Object parameterTypes = invocation.get("parameterTypes");
+        if (parameterTypes instanceof JSONArray) {
+            JSONArray jsonArray = (JSONArray) parameterTypes;
+            invocationVo.setParameterTypes(jsonArray.toArray(new String[jsonArray.size()]));
+        } else {
+            invocationVo.setParameterTypes((String[]) parameterTypes);
+        }
         Object[] dealRequestObjects = RequestDataConvert.dealRequestObjects(requestObjs, invokeType,
             invocationVo.getParameterTypes());
         invocationVo.setRequest(dealRequestObjects);
@@ -186,13 +193,6 @@ public class RecordConvert {
         invocationVo.setInvokeId((Integer) invocation.get("invokeId"));
         invocationVo.setProcessId((Integer) invocation.get("processId"));
         invocationVo.setIndex((Integer) invocation.get("index"));
-        Object parameterTypes = invocation.get("parameterTypes");
-        if (parameterTypes instanceof JSONArray) {
-            JSONArray jsonArray = (JSONArray) parameterTypes;
-            invocationVo.setParameterTypes(jsonArray.toArray(new String[jsonArray.size()]));
-        } else {
-            invocationVo.setParameterTypes((String[]) parameterTypes);
-        }
         invocationVo.setResponseType((String) invocation.get("responseType"));
         invocationVo.setCost((Long) invocation.get("end") - (Long) invocation.get("start"));
         // 转换调用栈信息
