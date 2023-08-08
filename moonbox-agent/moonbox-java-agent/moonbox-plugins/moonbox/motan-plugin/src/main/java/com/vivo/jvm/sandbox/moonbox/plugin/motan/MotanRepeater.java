@@ -17,7 +17,9 @@ import com.weibo.api.motan.config.ProtocolConfig;
 import com.weibo.api.motan.config.RefererConfig;
 import com.weibo.api.motan.config.RegistryConfig;
 import com.weibo.api.motan.proxy.CommonClient;
+import com.weibo.api.motan.rpc.Request;
 import com.weibo.api.motan.rpc.RpcContext;
+import com.weibo.api.motan.util.MotanClientUtil;
 import org.kohsuke.MetaInfServices;
 
 
@@ -78,15 +80,9 @@ public class MotanRepeater extends AbstractRepeater {
 
             // 使用泛化调用方式直接回放流量
             CommonClient client = referer.getRef();
+            Request request = MotanClientUtil.buildRequest(motanInvocation.getInterfaceName(), motanInvocation.getMethodName(), motanInvocation.getParamtersDesc(), motanInvocation.getParameters(), null);
+            return client.call(request, Object.class);
 
-            if (motanInvocation.getProtocol().equals("motan2")) {
-                //泛化调用(这种方式目前仅支持motan2协议)
-             return  client.call(motanInvocation.getMethodName(), motanInvocation.getParameters(), Object.class);
-            } else if (motanInvocation.getProtocol().equals("motan")) {
-                MoonboxLogUtils.warn("motan协议暂时不支持泛化调用，无法回放！");
-                //motan 原生协议 暂不支持泛化调用。我已经提交pr给motan官方，预计1.2.2版本才会合并
-                //return client.callV1(motanInvocation.getMethodName(), motanInvocation.getParameters(), motanInvocation.getParamtersDesc(), Object.class);
-            }
             //直接返缓存中的（回录制时候的结果）
             //return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
         } catch (Throwable e) {
