@@ -83,8 +83,9 @@ public class MotanRepeater extends AbstractRepeater {
                 //泛化调用(这种方式目前仅支持motan2协议)
              return  client.call(motanInvocation.getMethodName(), motanInvocation.getParameters(), Object.class);
             } else if (motanInvocation.getProtocol().equals("motan")) {
-                //motan 原生协议
-                return client.callV1(motanInvocation.getMethodName(), motanInvocation.getParameters(), motanInvocation.getParamtersDesc(), Object.class);
+                MoonboxLogUtils.warn("motan协议暂时不支持泛化调用，无法回放！");
+                //motan 原生协议 暂不支持泛化调用。我已经提交pr给motan官方，预计1.2.2版本才会合并
+                //return client.callV1(motanInvocation.getMethodName(), motanInvocation.getParameters(), motanInvocation.getParamtersDesc(), Object.class);
             }
             //直接返缓存中的（回录制时候的结果）
             //return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
