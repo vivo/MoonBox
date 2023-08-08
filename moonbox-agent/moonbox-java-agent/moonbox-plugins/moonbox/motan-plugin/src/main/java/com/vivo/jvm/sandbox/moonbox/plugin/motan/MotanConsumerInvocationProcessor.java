@@ -48,7 +48,7 @@ public class MotanConsumerInvocationProcessor extends DefaultInvocationProcessor
                 String interfaceName = (String)MethodUtils.invokeMethod(request,"getInterfaceName");
                 String methodName = (String) MethodUtils.invokeMethod(request, "getMethodName");
                 String paramsDesc =  ( String) MethodUtils.invokeMethod(request, "getParamtersDesc");
-                return new Identity(InvokeType.MOTAN.name(), interfaceName, methodName + paramsDesc, getExtra());
+                return new Identity(InvokeType.MOTAN.name(), interfaceName, methodName +"(" + paramsDesc +")", getExtra());
             } catch (Exception exception) {
                 MoonboxLogUtils.error("error occurred when assemble motan identity", exception);
             }
