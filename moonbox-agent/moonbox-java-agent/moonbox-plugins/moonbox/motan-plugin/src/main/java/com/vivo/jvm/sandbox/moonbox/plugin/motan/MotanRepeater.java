@@ -83,8 +83,6 @@ public class MotanRepeater extends AbstractRepeater {
             Request request = MotanClientUtil.buildRequest(motanInvocation.getInterfaceName(), motanInvocation.getMethodName(), motanInvocation.getParamtersDesc(), motanInvocation.getParameters(), null);
             return client.call(request, Object.class);
 
-            //直接返缓存中的（回录制时候的结果）
-            //return MoonboxRepeatCache.getMotanResponse(context.getTraceId());
         } catch (Throwable e) {
             MoonboxLogUtils.error("motan回放失败", e);
         } finally {
