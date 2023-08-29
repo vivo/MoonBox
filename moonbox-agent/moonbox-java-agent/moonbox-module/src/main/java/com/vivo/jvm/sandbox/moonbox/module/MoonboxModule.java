@@ -307,6 +307,7 @@ public class MoonboxModule implements Module, ModuleLifecycle {
     private void makeUpConfigWithRecordMode(RepeaterConfig repeaterConfig, RecordAgentConfig recordTaskConfig) {
         repeaterConfig.setHttpEntrancePatterns(recordTaskConfig.getHttpRecordInterfaces());
         repeaterConfig.setDubboEntrancePatterns(recordTaskConfig.getDubboRecordInterfaces());
+        repeaterConfig.setMotanEntrancePatterns(recordTaskConfig.getMotanRecordInterfaces());
         repeaterConfig.setJavaRecordInterfaces(recordTaskConfig.getJavaRecordInterfaces());
         repeaterConfig.setRecordCount(recordTaskConfig.getRecordCount());
         repeaterConfig.setPluginIdentities(recordTaskConfig.getSubInvocationPlugins());
@@ -323,7 +324,7 @@ public class MoonboxModule implements Module, ModuleLifecycle {
         // classPattern、methodPattern
         repeaterConfig.setJavaRecordInterfaces(replayAgentConfig.getJavaRecordInterfaces());
         // default support dubbo，http，java three modes
-        repeaterConfig.setRepeatIdentities(Lists.newArrayList("dubbo", "http", "java"));
+        repeaterConfig.setRepeatIdentities(Lists.newArrayList("dubbo", "http", "java","motan"));
         repeaterConfig.setStrategyType(replayAgentConfig.getStrategyType());
         // 子调用对比忽略规则配置
         repeaterConfig.setFieldDiffConfigs(replayAgentConfig.getSubInvokeDiffConfigs());

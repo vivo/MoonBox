@@ -73,6 +73,14 @@ export default [
         }
       },
       {
+        path: '/flow/motanDetail/:traceId/:taskRunId',
+        component: () => import(/* webpackChunkName: 'motanDetail' */ 'views/record/motanFlowDetail'),
+        name: 'motanDetail',
+        meta: {
+          title: 'motan流量数据详情'
+        }
+      },
+      {
         path: '/flow/javaDetail/:traceId/:taskRunId',
         component: () => import(/* webpackChunkName: 'javaDetail' */ 'views/record/javaFlowDetail'),
         name: 'javaDetail',
@@ -110,6 +118,14 @@ export default [
         name: 'playbackdubboDetail',
         meta: {
           title: 'dubbo流量回放数据详情'
+        }
+      },
+      {
+        path: '/playback/motanDetail/:replayTaskRunId/:replayTraceId',
+        component: () => import(/* webpackChunkName: 'playbackmotanDetail' */ 'views/playback/motanDetail'),
+        name: 'playbackmotanDetail',
+        meta: {
+          title: 'motan流量回放数据详情'
         }
       },
       {

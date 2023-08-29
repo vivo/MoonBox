@@ -46,6 +46,8 @@ public enum InvokeType {
 
     DUBBO("dubbo"),
 
+    MOTAN("motan"),
+
     HIBERNATE("hibernate"),
 
     SOCKETIO("socketio"),

@@ -41,6 +41,8 @@ public class RecordAgentConfig implements Serializable {
      */
     private List<DubboRecordInterface> dubboRecordInterfaces;
 
+    private List<MotanRecordInterface> motanRecordInterfaces;
+
     /**
      * http record interfaces
      */

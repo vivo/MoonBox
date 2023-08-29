@@ -16,11 +16,7 @@ limitations under the License.
 package com.vivo.internet.moonbox.service.data.es.replay.service;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.vivo.internet.moonbox.common.api.constants.ReplayStatus;
 import com.vivo.internet.moonbox.common.api.dto.PageRequest;
 import com.vivo.internet.moonbox.common.api.dto.PageResult;
@@ -36,6 +32,7 @@ import com.vivo.internet.moonbox.service.data.service.ReplayDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -68,13 +65,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -212,8 +203,17 @@ public class ReplayDataServiceImpl extends AbstractElasticService implements Rep
         GetRequest getRequest = new GetRequest(INDEX_NAME, replayTraceId);
         try {
             GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+            //TODO 这里面ESClient返回结果getSourceAsString后是带转义字符的(存进去就带转义字符了)，fastjson反序列化后也带转义字符，会导致对比结果详情页误导
+            EsReplayEntity esReplayEntity = JSON.parseObject(getResponse.getSourceAsString(), EsReplayEntity.class);
+            //非json串，去转义字符,去""
+            //esReplayEntity.setReplayResponse(StringEscapeUtils.unescapeJava(esReplayEntity.getReplayResponse()));
+            String str = esReplayEntity.getReplayResponse();
+            if (!str.startsWith("{") && !str.endsWith("}")) {
+                esReplayEntity.setReplayResponse(str.replace("\"", ""));
+            }
             return RepeatModelEntityConverter
-                    .build(JSON.parseObject(getResponse.getSourceAsString(), EsReplayEntity.class));
+                    .build(esReplayEntity);
+
         } catch (Exception e) {
             log.error("[ elasticsearch ] getReplayEntity error!traceId={}", replayTraceId, e);
         }

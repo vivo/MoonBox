@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -249,6 +250,7 @@ public class RecordDataServiceImpl extends AbstractElasticService implements Rec
         entity.setResponse(wrapper.getResponse());
 
         try {
+            //TODO 这里会莫名奇妙的把response字段转义
             IndexRequest request = new IndexRequest(INDEX_NAME).id(wrapper.getTraceId())
                     .source(JSON.toJSONString(entity), XContentType.JSON);
             IndexResponse rs = restHighLevelClient.index(request, RequestOptions.DEFAULT);

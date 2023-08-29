@@ -137,7 +137,7 @@ public class RecordTemplateServiceImpl implements RecordTemplateService {
     @Override
     public List<Map<String, Object>> getPluginsByTemplateId(String templateId) {
         List<Map<String, Object>> pluginVos = Arrays.stream(InvokeIdentity.values()).map(invokeType -> {
-            Map<String, Object> pluginVoMap = new HashMap<>(3);
+            Map<String, Object> pluginVoMap = new HashMap<>(4);
             if (StringUtils.isNotBlank(templateId)) {
                 pluginVoMap.put("name", invokeType.getIdentity());
                 pluginVoMap.put("checked", false);

@@ -126,6 +126,28 @@ limitations under the License.
                 </template>
               </el-table-column>
             </el-table>
+            <br>
+             <el-row>
+                          <h5 style="float: left;">motan接口</h5>
+                          <el-button-group class="fr" v-if="buttonFlag">
+                            <el-button type="primary" size="small" @click="addAll('motan')" icon="el-icon-plus">全选</el-button>
+                            <el-button type="danger" size="small" @click="delAll('motan')" icon="el-icon-delete">全删</el-button>
+                            <el-button type="success" size="small" @click="deal('motan', true)" icon="el-icon-document-add">新增</el-button>
+                          </el-button-group>
+                        </el-row>
+                        <el-table :data="ruleForm.motanRecordInterfaces" :header-cell-style="tableHeaderStyle" :cell-class-name="cellClassName" border size="small" max-height="515">
+                          <el-table-column type="index" label="序号" width="60" align="center"></el-table-column>
+                          <el-table-column label="接口名称" prop="interfaceName" align="center" show-overflow-tooltip :formatter="formatTableTDBlank"/>
+                          <el-table-column label="接口方法" prop="methodName" align="center" show-overflow-tooltip :formatter="formatTableTDBlank"/>
+                          <el-table-column label="描述" prop="desc" align="center" show-overflow-tooltip :formatter="formatTableTDBlank"/>
+                          <el-table-column label="采样率(采样率万分之N)" prop="sampleRate" width="200" align="center" show-overflow-tooltip :formatter="formatTableTDBlank"/>
+                          <el-table-column label="操作" align="center" v-if="buttonFlag" width="150">
+                            <template slot-scope="scope">
+                              <el-button type="text" size="mini" @click="deal('motan', false, scope.$index, scope.row)">编辑</el-button>
+                              <el-button type="text" size="mini" class="red" @click="del('motan', scope.$index)">删除</el-button>
+                            </template>
+                          </el-table-column>
+                        </el-table>
           </div>
         </el-card>
 
@@ -153,8 +175,8 @@ limitations under the License.
                   <el-checkbox
                     :label="item.name"
                     :key="item.name"
-                    :class="{ 'isGreen': (item.name == 'http' || item.name == 'dubbo-provider' || item.name == 'java-entrance') && pluginIsChecked(item.name) }">
-                    <span :class="{ 'isGreen': item.name == 'http' || item.name == 'dubbo-provider' || item.name == 'java-entrance' }">{{item.name}}</span>
+                    :class="{ 'isGreen': (item.name == 'http' || item.name == 'dubbo-provider' || item.name == 'java-entrance'|| item.name == 'motan-provider') && pluginIsChecked(item.name) }">
+                    <span :class="{ 'isGreen': item.name == 'http' || item.name == 'dubbo-provider' || item.name == 'java-entrance' || item.name == 'motan-provider'}">{{item.name}}</span>
                   </el-checkbox>
                 </template>
               </el-checkbox-group>
@@ -323,6 +345,55 @@ limitations under the License.
         <el-button type="primary" @click="dialogConfirm('java')" size="mini">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- motan接口新增弹出框 -->
+        <el-dialog title="motan接口" :visible.sync="motanDialogFormVisible" width="600px">
+          <el-form :model="motanRuleForm" :rules="motanRules" ref="motan" class="demo-ruleForm" label-width="180px">
+            <el-form-item label="接口名称" prop="interfaceName">
+              <el-input v-model="motanRuleForm.interfaceName" size="small"></el-input>
+              <el-tooltip placement="top" style="margin-left: 5px">
+                <div slot="content" class="tips-content text-tips-content">
+                  <div class="rule-box">
+                    请输入要采集的motan接口名，支持正则表达式。<br>
+                    采集某个具体接口：com.test.query.TestRecordApi、采集所有接口：.*
+                  </div>
+                </div>
+                <i class="el-icon-question" />
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="接口方法" prop="methodName">
+              <el-input v-model="motanRuleForm.methodName" size="small"></el-input>
+              <el-tooltip placement="top" style="margin-left: 5px">
+                <div slot="content" class="tips-content text-tips-content">
+                  <div class="rule-box">
+                    请输入要采集的motan接口方法名，支持正则表达式。<br>
+                    采集某个具体方法名：testRecord、采集所有方法：.*
+                  </div>
+                </div>
+                <i class="el-icon-question" />
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="描述" prop="desc">
+              <el-input type="textarea" :rows="3" v-model="motanRuleForm.desc" size="small"></el-input>
+            </el-form-item>
+            <el-form-item label="采样率(采样率万分之N)" prop="sampleRate">
+              <el-input-number v-model="motanRuleForm.sampleRate" :min="1" :max="10000" label="1~10000" size="small"></el-input-number>
+              <el-tooltip placement="top" style="margin-left: 5px">
+                <div slot="content" class="tips-content text-tips-content">
+                  <div class="rule-box">
+                    采样率范围1-10000，10000代表全量采集
+                  </div>
+                </div>
+                <i class="el-icon-question" />
+              </el-tooltip>
+            </el-form-item>
+          </el-form>
+          <div style="text-align:right;margin-top: 3%">
+            <el-button @click="motanDialogFormVisible = false" size="mini">取 消</el-button>
+            <el-button type="primary" @click="dialogConfirm('motan')" size="mini">确 定</el-button>
+          </div>
+        </el-dialog>
+
     <el-dialog
       title="提示"
       :visible.sync="addDialogVisible"
@@ -358,6 +429,7 @@ export default {
       index: 0, //每张表所需要修改的索引号
       httpDialogFormVisible: false,
       dubboDialogFormVisible: false,
+      motanDialogFormVisible: false,
       javaDialogFormVisible: false,
       type: 'add',
       chooseAll: true,
@@ -368,6 +440,7 @@ export default {
         recordTaskDuration: 60,
         httpRecordInterfaces: [],
         dubboRecordInterfaces: [],
+        motanRecordInterfaces: [],
         javaRecordInterfaces: [],
         rmqRecordInterfaces: [],
         subInvocationPlugins: [],
@@ -447,6 +520,44 @@ export default {
           { required: true, message: '请输入采样率', trigger: 'blur' }
         ],
       },
+       motanRuleForm: {
+              interfaceName: '',
+              methodName: '',
+              desc: '',
+              sampleRate: ''
+            },
+            motanRules: {
+              interfaceName: [
+                { required: true, message: '请输入接口名称', trigger: 'blur' },
+                {
+                  min: 1,
+                  max: 350,
+                  message: '长度在 1 到 350 个字符',
+                  trigger: 'blur',
+                },
+              ],
+              methodName: [
+                { required: true, message: '请输入接口方法', trigger: 'blur' },
+                {
+                  min: 1,
+                  max: 50,
+                  message: '长度在 1 到 50 个字符',
+                  trigger: 'blur',
+                },
+              ],
+              desc: [
+                { required: true, message: '请输入描述', trigger: 'blur' },
+                {
+                  min: 1,
+                  max: 200,
+                  message: '长度在 200 个字符以内',
+                  trigger: 'blur',
+                },
+              ],
+              sampleRate: [
+                { required: true, message: '请输入采样率', trigger: 'blur' }
+              ],
+            },
       javaRuleForm: {
         classPattern: '',
         methodPatterns: '',
@@ -533,6 +644,7 @@ export default {
           this.ruleForm.recordTaskDuration = obj.recordTaskDuration
           this.ruleForm.httpRecordInterfaces = obj.httpRecordInterfaces
           this.ruleForm.dubboRecordInterfaces = obj.dubboRecordInterfaces
+          this.ruleForm.motanRecordInterfaces = obj.motanRecordInterfaces
           this.ruleForm.javaRecordInterfaces = []
           if (obj.javaRecordInterfaces && obj.javaRecordInterfaces.length) {
             obj.javaRecordInterfaces.forEach(item => {
@@ -616,6 +728,12 @@ export default {
           desc: this.dubboRuleForm.desc,
           sampleRate: this.dubboRuleForm.sampleRate
         },
+            motan: {
+                  interfaceName: this.motanRuleForm.interfaceName,
+                  methodName: this.motanRuleForm.methodName,
+                  desc: this.motanRuleForm.desc,
+                  sampleRate: this.motanRuleForm.sampleRate
+                },
         java: {
           classPattern: this.javaRuleForm.classPattern,
           methodPatterns: this.javaRuleForm.methodPatterns,
@@ -669,6 +787,7 @@ export default {
           params.appName = this.ruleForm.appName
           let templateConfig = {}
           templateConfig.dubboRecordInterfaces = this.ruleForm.dubboRecordInterfaces
+          templateConfig.motanRecordInterfaces = this.ruleForm.motanRecordInterfaces
           templateConfig.httpRecordInterfaces = this.ruleForm.httpRecordInterfaces
           if (this.ruleForm.javaRecordInterfaces && this.ruleForm.javaRecordInterfaces.length) {
             this.ruleForm.javaRecordInterfaces.forEach(item => {
@@ -676,7 +795,7 @@ export default {
             }) 
           }
           templateConfig.javaRecordInterfaces = this.ruleForm.javaRecordInterfaces
-          if (templateConfig.dubboRecordInterfaces.length === 0 && templateConfig.httpRecordInterfaces.length === 0 && templateConfig.javaRecordInterfaces.length === 0) return this.$message.warning('至少需要有一条入口流量采集配置')
+          if (templateConfig.dubboRecordInterfaces.length === 0 &&templateConfig.motanRecordInterfaces.length === 0 && templateConfig.httpRecordInterfaces.length === 0 && templateConfig.javaRecordInterfaces.length === 0) return this.$message.warning('至少需要有一条入口流量采集配置')
 
           templateConfig.recordCount = this.ruleForm.recordCount
           templateConfig.recordTaskDuration = this.ruleForm.recordTaskDuration

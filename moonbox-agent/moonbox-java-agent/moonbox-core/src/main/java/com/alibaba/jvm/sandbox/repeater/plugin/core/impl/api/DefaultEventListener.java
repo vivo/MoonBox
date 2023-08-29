@@ -69,6 +69,11 @@ public class DefaultEventListener implements EventListener {
         this.processor = processor;
     }
 
+    /**
+     * 这是repeater中最核心的，主流程都在该方法中串起来
+     * @param event 触发事件
+     * @throws Throwable
+     */
     @Override
     public void onEvent(Event event) throws Throwable {
         try {
@@ -171,11 +176,13 @@ public class DefaultEventListener implements EventListener {
      */
     protected void doBefore(BeforeEvent event) throws ProcessControlException {
 
+        //如果是回放流量，直接doMock，并返回
         if (MoonboxRepeatCache.isRepeatFlow(Tracer.getTraceId())) {
             processor.doMock(event, entrance, invokeType, Boolean.TRUE);
             return;
         }
 
+        //非回放的流量才会走到这里
         Invocation invocation = this.initInvocation(event);
 
         if (null == invocation.getStart()) {
@@ -237,6 +244,7 @@ public class DefaultEventListener implements EventListener {
      *            event
      */
     protected void doReturn(ReturnEvent event) {
+        //如果是回放流量，直接返回
         if (MoonboxRepeatCache.isRepeatFlow(Tracer.getTraceId())) {
             return;
         }
