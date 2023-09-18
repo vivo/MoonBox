@@ -207,7 +207,7 @@ public abstract class AbstractTaskRunService implements TaskRunService {
         MoonBoxLogVO.MoonBoxLogVOBuilder builder = MoonBoxLogVO.builder().taskRunId(taskRunInfo.getTaskRunId());
         MoonBoxResult<Void> returnResult = null;
         try {
-            String result =agentDistributionService.startAgent(dbTaskRunInfo);
+            String result = agentDistributionService.startAgent(dbTaskRunInfo);
             dbUpdate.setRunStatus(TaskRunStatus.RUNNING.getCode());
             builder.content("agent启动执行结果:"+result);
             returnResult = MoonBoxResult.createSuccess();
