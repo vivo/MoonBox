@@ -84,6 +84,10 @@
 
 *<font color="#415ff">接口方法</font>：* 支持正则表达式。采集某个具体方法名：testRecord、采集所有方法：.*
 
+##### motan接口  
+
+同上，参考dubbo  
+
 ##### java方法录制
 
 java方法录制比较特殊，由于是依托于spring实现，因此有如下限制：
