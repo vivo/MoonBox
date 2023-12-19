@@ -56,11 +56,15 @@
 
 ![1669969036417](./images/guide/1669969036417.png)
 
-*<font color="#415ff">应用名称</font>：* server端接口 /api/app/appNameList 返回，server部署前需修改为用户自身应用标识。需要注意的是，**<font color="#dd0000">jvm参数需包含该应用标识</font>**，否则”远程录制“方式无法启动
+<font color="#415ff">应用名称</font>： server端接口 /api/app/appNameList 返回，server部署前需修改为用户自身应用标识。需要注意的是，**<font color="#dd0000">jvm参数需包含该应用标识</font>**，否则”远程录制“方式无法启动
 
 <font color="#415ff">单接口采集量</font>：单个接口的最大采集量
 
 <font color="#415ff">任务运行时长</font>：录制任务运行时长，超过该时长后，录制任务为自动关闭
+
+**很多新手朋友对上面的"应用名称"和"jvm参数标识"表示疑惑，不知道如何配置和使用，补充说明如下：**
+- 为了演示方便，**"应用名称"** 下拉列表对应的数据默认是在接口中硬编码实现的。生产使用时建议自行扩展，可以考虑从数据库、CMDB、注册中心/配置中心等中读取数据；
+- **"jvm启动参数标识"** 是未做强制规范约定的，建议在目标应用启动脚本中使用类似"-DappName=item-center"（item-center是目标应用名/服务名）。
 
 #### 流量采集配置
 
@@ -79,6 +83,10 @@
 *<font color="#415ff">接口名称</font>：* 支持正则表达式。采集某个具体接口：com.vivo.test.query.TestRecordApi、采集所有接口：.*
 
 *<font color="#415ff">接口方法</font>：* 支持正则表达式。采集某个具体方法名：testRecord、采集所有方法：.*
+
+##### motan接口  
+
+同上，参考dubbo  
 
 ##### java方法录制
 

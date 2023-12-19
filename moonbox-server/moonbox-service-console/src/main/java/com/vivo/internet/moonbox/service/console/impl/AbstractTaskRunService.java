@@ -115,7 +115,7 @@ public abstract class AbstractTaskRunService implements TaskRunService {
 
     @Override
     public void deleteByPkId(String taskRunId) {
-        TaskRunInfoWithBLOBs taskRunInfoWithBLOBs =getByTaskRunId(taskRunId);
+        TaskRunInfoWithBLOBs taskRunInfoWithBLOBs = getByTaskRunId(taskRunId);
         TaskRunInfoWithBLOBs taskRunInfo = new TaskRunInfoWithBLOBs();
         taskRunInfo.setDeleteState(DeleteStatus.DELETED.getStatus());
         taskRunInfo.setId(taskRunInfoWithBLOBs.getId());
@@ -207,9 +207,9 @@ public abstract class AbstractTaskRunService implements TaskRunService {
         MoonBoxLogVO.MoonBoxLogVOBuilder builder = MoonBoxLogVO.builder().taskRunId(taskRunInfo.getTaskRunId());
         MoonBoxResult<Void> returnResult = null;
         try {
-            String result =agentDistributionService.startAgent(dbTaskRunInfo);
+            String result = agentDistributionService.startAgent(dbTaskRunInfo);
             dbUpdate.setRunStatus(TaskRunStatus.RUNNING.getCode());
-            builder.content("agent启动执行结果:"+result);
+            builder.content("agent启动执行结果:" + result);
             returnResult = MoonBoxResult.createSuccess();
         } catch (Exception e) {
             dbUpdate.setRunStatus(TaskRunStatus.FAILED.getCode());
@@ -230,7 +230,7 @@ public abstract class AbstractTaskRunService implements TaskRunService {
 
     @Override
     public void stop(String taskRunId, String runUser) {
-        TaskRunInfoWithBLOBs taskRunInfoWithBLOBs =getByTaskRunId(taskRunId);
+        TaskRunInfoWithBLOBs taskRunInfoWithBLOBs = getByTaskRunId(taskRunId);
         TaskRunInfoWithBLOBs update = new TaskRunInfoWithBLOBs();
         update.setRunStatus(TaskRunStatus.STOP_RUN.getCode());
         update.setUpdateUser(runUser);
@@ -250,7 +250,7 @@ public abstract class AbstractTaskRunService implements TaskRunService {
         TaskRunInfoExample taskRunInfoExample = new TaskRunInfoExample();
         taskRunInfoExample.createCriteria().andTaskRunIdEqualTo(taskRunId);
         List<TaskRunInfoWithBLOBs> taskRunInfo = taskRunInfoMapper.selectByExampleWithBLOBs(taskRunInfoExample);
-        AssertUtil.assetTrue(taskRunInfo.size() >0,"没有找到任务,任务id:"+taskRunId);
+        AssertUtil.assetTrue(taskRunInfo.size() > 0, "没有找到任务,任务id:" + taskRunId);
         return taskRunInfo.get(0);
     }
 
