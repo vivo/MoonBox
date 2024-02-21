@@ -17,6 +17,7 @@ package com.alibaba.jvm.sandbox.repeater.plugin.redis;
 
 import com.alibaba.jvm.sandbox.api.event.BeforeEvent;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.MoonboxLogUtils;
 import com.vivo.internet.moonbox.common.api.model.Invocation;
 import com.vivo.internet.moonbox.common.api.model.InvokeType;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -45,6 +46,7 @@ public class RedissonProcessor extends DefaultInvocationProcessor {
             Object name = FieldUtils.readField(target, "name", true);
             return new Object[]{name};
         } catch (Exception e) {
+            MoonboxLogUtils.warn("redisson assembleRequest failed.", e);
             return new Object[]{};
         }
     }
