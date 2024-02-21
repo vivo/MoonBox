@@ -36,4 +36,6 @@ public class RecordWrapperEntity extends RecordWrapper {
 
     private String response;
 
+    private String request;
+
 }

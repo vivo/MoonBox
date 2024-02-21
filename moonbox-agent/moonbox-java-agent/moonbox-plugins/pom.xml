@@ -28,7 +28,8 @@
         <module>moonbox/spring-session-plugin</module>
         <module>moonbox/universal-plugin</module>
         <module>moonbox/motan-plugin</module>
-
+        <module>moonbox/tars-plugin</module>
+        <module>moonbox/hbase-plugin</module>
         <module>repeater/dubbo-plugin</module>
         <module>repeater/hibernate-plugin</module>
         <module>repeater/http-plugin</module>
