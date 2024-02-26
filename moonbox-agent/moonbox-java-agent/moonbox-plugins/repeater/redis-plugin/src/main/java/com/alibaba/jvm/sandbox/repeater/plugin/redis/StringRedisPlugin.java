@@ -27,7 +27,7 @@ import org.kohsuke.MetaInfServices;
 import java.util.List;
 
 /**
- * 只针对个别应用生效
+ * string增强插件
  */
 @MetaInfServices(InvokePlugin.class)
 public class StringRedisPlugin extends AbstractInvokePluginAdapter {

@@ -21,9 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * UriUtils - 接口类
- *
- * @version 1.0
- * @since 2020/10/23 18:40
  */
 public class UriUtils {
 

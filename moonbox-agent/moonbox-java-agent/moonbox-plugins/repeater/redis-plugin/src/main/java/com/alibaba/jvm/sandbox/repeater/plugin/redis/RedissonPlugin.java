@@ -27,7 +27,7 @@ import org.kohsuke.MetaInfServices;
 import java.util.List;
 
 /**
- * 只针对个别应用生效
+ * Redisson功能插件
  */
 @MetaInfServices(InvokePlugin.class)
 public class RedissonPlugin extends AbstractInvokePluginAdapter {

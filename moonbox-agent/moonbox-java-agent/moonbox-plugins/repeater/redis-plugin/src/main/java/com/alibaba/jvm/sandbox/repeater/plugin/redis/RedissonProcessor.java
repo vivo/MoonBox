@@ -24,9 +24,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
  * RedissonProcessor 新的处理器
- *
- * @version 1.0
- * @since 2020/12/17 16:07
  */
 public class RedissonProcessor extends DefaultInvocationProcessor {
     public RedissonProcessor(InvokeType type) {

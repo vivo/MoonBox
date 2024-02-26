@@ -22,6 +22,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.Invocation;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.InvokeType;
 import com.alibaba.jvm.sandbox.repeater.plugin.utils.Bytes;
 import com.alibaba.jvm.sandbox.repeater.plugin.utils.ParameterTypesUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 /**
  * hbase 处理器
  */
+@Slf4j
 class HbaseProcessor extends DefaultInvocationProcessor {
 
     HbaseProcessor(InvokeType type) {
@@ -56,6 +58,7 @@ class HbaseProcessor extends DefaultInvocationProcessor {
             String operation = event.javaMethodName;
             return new Identity(InvokeType.HBASE.name(), tableName, operation + ParameterTypesUtil.getTypesStrByObjects(event.argumentArray), null);
         } catch (Exception e) {
+            log.error("hbaseProcessor-assembleIdentity failed,event:{}", event, e);
             return new Identity(InvokeType.HBASE.name(), "unknown" + ":" + "unknown", "unknown", null);
         }
     }
@@ -151,6 +154,7 @@ class HbaseProcessor extends DefaultInvocationProcessor {
             getReq.put("familyMap", familyQualifierValueMap);
             return getReq;
         } catch (Exception e) {
+            log.error("hbaseProcessor-assembleRequest failed,data:{}", data, e);
             return null;
         }
     }

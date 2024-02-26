@@ -26,9 +26,6 @@ import java.lang.reflect.Method;
 
 /**
  * TarsInvocationProcessor - tars增强逻辑处理器
- *
- * @version 1.0
- * @since 2020/11/24 15:58
  */
 public class TarsInvocationProcessor extends DefaultInvocationProcessor {
     public TarsInvocationProcessor(InvokeType type) {

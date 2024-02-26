@@ -175,12 +175,10 @@ public class RecordRedisServiceImpl implements RecordRedisService {
 
 
     private String getKey(String taskRunId,String entranceUri,List<Object>values) {
-        String UNIQUE_FILTER_KEY_PREFIX = "unique_filter_";
-        return UNIQUE_FILTER_KEY_PREFIX + EncodeUtils.md5Hex(taskRunId+"_"+entranceUri+"_"+JSON.toJSONString(values));
+        return "unique_filter_" + EncodeUtils.md5Hex(taskRunId+"_"+entranceUri+"_"+JSON.toJSONString(values));
     }
     private String getResponseKey(String taskRunId,String entranceUri,List<Object>values) {
-        String UNIQUE_FILTER_RESPONSE_KEY_PREFIX = "unique_filter_response";
-        return UNIQUE_FILTER_RESPONSE_KEY_PREFIX + EncodeUtils.md5Hex(taskRunId+"_"+entranceUri+"_"+JSON.toJSONString(values));
+        return "unique_filter_response" + EncodeUtils.md5Hex(taskRunId+"_"+entranceUri+"_"+JSON.toJSONString(values));
     }
 
 

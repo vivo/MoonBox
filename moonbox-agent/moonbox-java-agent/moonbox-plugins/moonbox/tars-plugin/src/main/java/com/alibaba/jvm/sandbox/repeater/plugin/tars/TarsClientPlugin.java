@@ -29,9 +29,6 @@ import java.util.List;
 
 /**
  * TarsClientPlugin - tars客户端增强器
- *
- * @version 1.0
- * @since 2020/11/24 15:51
  */
 @MetaInfServices(InvokePlugin.class)
 public class TarsClientPlugin extends AbstractInvokePluginAdapter {

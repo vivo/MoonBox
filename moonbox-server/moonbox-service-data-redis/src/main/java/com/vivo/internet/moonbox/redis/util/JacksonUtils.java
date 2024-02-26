@@ -21,17 +21,16 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.vivo.internet.moonbox.common.api.serialize.SerializeException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
  * JacksonUtils - {@link JacksonUtils}
- *
- * @version 1.0
- * @since 2022/8/22 10:43
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
+@Slf4j
 public class JacksonUtils {
 
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -67,6 +66,7 @@ public class JacksonUtils {
         try {
             return pretty ? mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object) : mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
+            log.error("jackSonUtil-serialize failed,object:{}, pretty:{}", object, pretty, e);
             throw new SerializeException("jackson-serialize-error", e);
         }
     }

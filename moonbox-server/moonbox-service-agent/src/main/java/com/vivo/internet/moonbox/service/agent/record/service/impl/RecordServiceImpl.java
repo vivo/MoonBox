@@ -41,9 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * RecordServiceImpl - 流量录制服务
- *
- * @version 1.0
- * @since 2022/9/5 15:49
  */
 @Service
 @Slf4j

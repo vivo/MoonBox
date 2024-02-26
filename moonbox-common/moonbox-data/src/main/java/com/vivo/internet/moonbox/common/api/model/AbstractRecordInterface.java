@@ -21,9 +21,6 @@ import lombok.Data;
 
 /**
  * AbstractRecordInterface - {@link AbstractRecordInterface}
- *
- * @version 1.0
- * @since 2022/8/23 14:39
  */
 @Data
 public abstract class AbstractRecordInterface implements Serializable {

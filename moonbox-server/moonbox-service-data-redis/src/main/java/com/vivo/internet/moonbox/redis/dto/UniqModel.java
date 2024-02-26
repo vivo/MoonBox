@@ -20,9 +20,6 @@ import lombok.Data;
 
 /**
  * UniqModel - 去重信息
- *
- * @version 1.0
- * @since 2021/6/8 11:29
  */
 @Data
 @Builder

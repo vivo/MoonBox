@@ -50,6 +50,7 @@ public class JsonUtils {
         try {
             return getJsonMapper().readValue(json, clz);
         } catch (Exception e) {
+            logger.error("jackSonUtil-serialize failed,json:{}, clz:{}", json, clz, e);
             throw new Exception("readObject出错：" + e.getMessage() + " json:" + json + " clz:" + clz, e);
         }
     }
