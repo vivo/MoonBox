@@ -15,7 +15,6 @@ limitations under the License.
  */
 package com.vivo.internet.moonbox.service.agent.record.service.impl;
 
-import com.vivo.internet.moonbox.common.api.model.RecordAgentConfig;
 import com.vivo.internet.moonbox.common.api.serialize.Serializer;
 import com.vivo.internet.moonbox.common.api.serialize.SerializerProvider;
 import com.vivo.internet.moonbox.redis.RecordRedisService;

@@ -16,7 +16,6 @@ limitations under the License.
 package com.vivo.internet.moonbox.redis.util;
 
 
-import com.vivo.internet.moonbox.common.api.model.InvokeType;
 import org.apache.commons.lang3.StringUtils;
 
 /**
