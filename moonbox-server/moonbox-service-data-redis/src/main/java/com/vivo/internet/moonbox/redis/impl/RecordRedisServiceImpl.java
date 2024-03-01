@@ -24,11 +24,11 @@ import com.vivo.internet.moonbox.common.api.model.*;
 import com.vivo.internet.moonbox.common.api.serialize.Serializer;
 import com.vivo.internet.moonbox.common.api.serialize.SerializerProvider;
 import com.vivo.internet.moonbox.redis.RecordRedisService;
-import com.vivo.internet.moonbox.redis.config.PropCondition;
+import com.vivo.internet.moonbox.redis.config.RedisPropCondition;
 import com.vivo.internet.moonbox.redis.dto.UniqModel;
-import com.vivo.internet.moonbox.redis.util.EncodeUtils;
-import com.vivo.internet.moonbox.redis.util.JsonUtils;
-import com.vivo.internet.moonbox.redis.util.UriUtils;
+import com.alibaba.jvm.sandbox.repeater.plugin.util.EncodeUtils;
+import com.alibaba.jvm.sandbox.repeater.plugin.util.JsonUtils;
+import com.alibaba.jvm.sandbox.repeater.plugin.util.UriUtils;
 import com.vivo.internet.moonbox.service.data.model.record.RecordWrapperEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +48,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-@Conditional(PropCondition.class)
+@Conditional(RedisPropCondition.class)
 public class RecordRedisServiceImpl implements RecordRedisService {
 
     @Autowired(required = false)

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * 条件
  */
-public class PropCondition extends SpringBootCondition implements Condition {
+public class RedisPropCondition extends SpringBootCondition implements Condition {
 
     //IP-PORT校验
     private static final String IP_PORT_PATTERN =

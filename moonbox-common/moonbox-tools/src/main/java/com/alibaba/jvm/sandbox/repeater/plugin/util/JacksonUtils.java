@@ -13,14 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-package com.vivo.internet.moonbox.redis.util;
+package com.alibaba.jvm.sandbox.repeater.plugin.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.vivo.internet.moonbox.common.api.serialize.SerializeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
@@ -48,9 +47,9 @@ public class JacksonUtils {
      *
      * @param object 要序列化的对象
      * @return 序列化后的字符串
-     * @throws SerializeException 序列化异常
+     * @throws Exception 序列化异常
      */
-    public static String serialize(Object object) throws SerializeException {
+    public static String serialize(Object object) throws Exception {
         return serialize(object, true);
     }
 
@@ -60,14 +59,14 @@ public class JacksonUtils {
      * @param object 需要序列化的对象
      * @param pretty 是否需要格式化输出
      * @return 序列化后的JSON字符串
-     * @throws SerializeException 序列化异常
+     * @throws Exception 序列化异常
      */
-    public static String serialize(Object object, boolean pretty) throws SerializeException {
+    public static String serialize(Object object, boolean pretty) throws Exception {
         try {
             return pretty ? mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object) : mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             log.error("jackSonUtil-serialize failed,object:{}, pretty:{}", object, pretty, e);
-            throw new SerializeException("jackson-serialize-error", e);
+            throw new Exception("jackson-serialize-error", e);
         }
     }
 

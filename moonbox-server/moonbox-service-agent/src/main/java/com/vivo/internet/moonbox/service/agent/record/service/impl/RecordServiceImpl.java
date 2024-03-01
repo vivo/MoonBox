@@ -23,7 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import com.vivo.internet.moonbox.redis.util.JacksonUtils;
+import com.alibaba.jvm.sandbox.repeater.plugin.util.JacksonUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.vivo.internet.moonbox.common.api.dto.MoonBoxResult;
@@ -91,7 +91,7 @@ public class RecordServiceImpl implements RecordService {
                 .getRequestSerialized(), Object[].class);
         try{
             entity.setRequest(JacksonUtils.serialize(objects));
-        } catch (SerializeException e) {
+        } catch (Exception e) {
             log.error("deserialize request body failed, body:{}.",wrapper.getEntranceInvocation().getRequestSerialized(), e);
         }
 

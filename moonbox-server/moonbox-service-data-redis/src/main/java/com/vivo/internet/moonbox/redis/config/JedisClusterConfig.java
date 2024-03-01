@@ -15,6 +15,7 @@ limitations under the License.
  */
 package com.vivo.internet.moonbox.redis.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -25,7 +26,7 @@ import redis.clients.jedis.JedisCluster;
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
-
+@Slf4j
 @Configuration
 public class JedisClusterConfig {
 
@@ -39,19 +40,24 @@ public class JedisClusterConfig {
      * @return JedisCluster实例
      */
     @Bean
-    @Conditional(PropCondition.class)
+    @Conditional(RedisPropCondition.class)
     public JedisCluster getJedisCluster() {
-        //获取服务器数组(这里要相信自己的输入，所以没有考虑空指针问题)
-        String[] serverArray = redisProperties.getClusterNodes().split(",");
-        Set<HostAndPort> nodes = new HashSet<>();
+        try {
+            //获取服务器数组(这里要相信自己的输入，所以没有考虑空指针问题)
+            String[] serverArray = redisProperties.getClusterNodes().split(",");
+            Set<HostAndPort> nodes = new HashSet<>();
 
-        // 遍历每个节点的地址，将其解析成主机名和端口号，并添加到nodes中保存
-        for (String ipPort : serverArray) {
-            String[] ipPortPair = ipPort.split(":");
-            nodes.add(new HostAndPort(ipPortPair[0].trim(), Integer.parseInt(ipPortPair[1].trim())));
+            // 遍历每个节点的地址，将其解析成主机名和端口号，并添加到nodes中保存
+            for (String ipPort : serverArray) {
+                String[] ipPortPair = ipPort.split(":");
+                nodes.add(new HostAndPort(ipPortPair[0].trim(), Integer.parseInt(ipPortPair[1].trim())));
+            }
+            // 创建一个JedisCluster实例，并设置相关的参数，比如nodes、commandTimeout、poolConfig等
+            return new JedisCluster(nodes, redisProperties.getCommandTimeout(), 1000, 1,
+                    redisProperties.getPassword(), new GenericObjectPoolConfig<>());
+        } catch (Exception e) {
+            log.error("redis config init failed", e);
+            return null;
         }
-        // 创建一个JedisCluster实例，并设置相关的参数，比如nodes、commandTimeout、poolConfig等
-        return new JedisCluster(nodes,redisProperties.getCommandTimeout(),1000,1,redisProperties.getPassword() ,new GenericObjectPoolConfig());//需要密码连接的创建对象方式
     }
-
 }
