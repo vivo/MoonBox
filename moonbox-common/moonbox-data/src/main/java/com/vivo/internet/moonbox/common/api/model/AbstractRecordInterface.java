@@ -21,10 +21,6 @@ import lombok.Data;
 
 /**
  * AbstractRecordInterface - {@link AbstractRecordInterface}
- *
- * @author yanjiang.liu
- * @version 1.0
- * @since 2022/8/23 14:39
  */
 @Data
 public abstract class AbstractRecordInterface implements Serializable {
@@ -33,9 +29,21 @@ public abstract class AbstractRecordInterface implements Serializable {
 
     private String sampleRate = "10000";
 
+    private String analysisFields;
+
+    /**
+     * 流量去重配置字段
+     */
+    private String uniqRecordDataFields;
+
+    /**
+     * 流量去重配置字段（根据响应字段）
+     */
+    private String uniqResponseDataFields;
+
     /**
      * 获取接口唯一配置
-     * 
+     *
      * @return 唯一键
      */
     public abstract String getUniqueKey();

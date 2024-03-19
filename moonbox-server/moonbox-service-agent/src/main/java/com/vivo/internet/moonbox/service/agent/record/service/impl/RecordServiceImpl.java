@@ -15,11 +15,15 @@ limitations under the License.
  */
 package com.vivo.internet.moonbox.service.agent.record.service.impl;
 
+import com.vivo.internet.moonbox.common.api.serialize.Serializer;
+import com.vivo.internet.moonbox.common.api.serialize.SerializerProvider;
+import com.vivo.internet.moonbox.redis.RecordRedisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import com.alibaba.jvm.sandbox.repeater.plugin.util.JacksonUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.vivo.internet.moonbox.common.api.dto.MoonBoxResult;
@@ -36,10 +40,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * RecordServiceImpl - 流量录制服务
- *
- * @author xu.kai
- * @version 1.0
- * @since 2022/9/5 15:49
  */
 @Service
 @Slf4j
@@ -48,6 +48,9 @@ public class RecordServiceImpl implements RecordService {
     private final TaskConfigService taskConfigService;
 
     private final RecordDataService recordDataService;
+
+    @Autowired(required = false)
+    private RecordRedisService recordRedisService;
 
     @Autowired
     public RecordServiceImpl(TaskConfigService taskConfigService, RecordDataService recordDataService) {
@@ -82,6 +85,20 @@ public class RecordServiceImpl implements RecordService {
             }
         } catch (SerializeException e){
             log.error("deserialize response body failed, response:{}.",wrapper.getEntranceInvocation().getResponseSerialized(), e);
+        }
+
+        Object[] objects = SerializerProvider.instance().provide(Serializer.Type.HESSIAN).deserialize(wrapper.getEntranceInvocation()
+                .getRequestSerialized(), Object[].class);
+        try{
+            entity.setRequest(JacksonUtils.serialize(objects));
+        } catch (Exception e) {
+            log.error("deserialize request body failed, body:{}.",wrapper.getEntranceInvocation().getRequestSerialized(), e);
+        }
+
+        //请求重复校验(不同类型、不同接口的核心字段配置请在web后台任务创建时自行选择)
+        String errMsg = recordRedisService == null ? "" :recordRedisService.judgeSave(wrapper, agentConfig.getRecordAgentConfig(), entity);
+        if (StringUtils.isNotEmpty(errMsg)) {
+            return MoonBoxResult.createFailResponse(errMsg);
         }
 
         boolean isSuccess = recordDataService.saveData(entity);

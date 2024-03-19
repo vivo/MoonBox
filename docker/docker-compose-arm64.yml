@@ -16,6 +16,82 @@
 version: "3"
 
 services:
+  redis-cluster:
+    image: redis
+    command: redis-cli --cluster create 172.22.225.9:6371 172.22.225.9:6372 172.22.225.9:6373 172.22.225.9:6374 172.22.225.9:6375 172.22.225.9:6376 --cluster-replicas 1  --cluster-yes
+    depends_on:
+      - redis-6371
+      - redis-6372
+      - redis-6373
+      - redis-6374
+      - redis-6375
+      - redis-6376
+  redis-6371: # 服务名称
+    image: redis # 创建容器时所需的镜像
+    container_name: redis-6371 # 容器名称
+    restart: always # 容器总是重新启动
+    ports:
+      - "6371:6371"
+      - "16371:16371"
+    volumes: # 数据卷，目录挂载
+      - ./redis/redis1/redis1.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis1/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf # 覆盖容器启动后默认执行的命令
+
+  redis-6372:
+    image: redis
+    container_name: redis-6372
+    ports:
+      - "6372:6372"
+      - "16372:16372"
+    volumes:
+      - ./redis/redis2/redis2.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis2/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-6373:
+    image: redis
+    container_name: redis-6373
+    ports:
+      - "6373:6373"
+      - "16373:16373"
+    volumes:
+      - ./redis/redis3/redis3.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis3/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-6374:
+    image: redis
+    container_name: redis-6374
+    ports:
+      - "6374:6374"
+      - "16374:16374"
+    volumes:
+      - ./redis/redis4/redis4.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis4/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-6375:
+    image: redis
+    container_name: redis-6375
+    ports:
+      - "6375:6375"
+      - "16375:16375"
+    volumes:
+      - ./redis/redis5/redis5.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis5/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-6376:
+    image: redis
+    container_name: redis-6376
+    ports:
+      - "6376:6376"
+      - "16376:16376"
+    volumes:
+      - ./redis/redis6/redis6.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis6/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
   moonbox-mysql:
     platform: linux/amd64
     container_name: moonbox-mysql

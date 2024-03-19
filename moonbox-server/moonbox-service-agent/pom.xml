@@ -22,6 +22,11 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <artifactId>moonbox-service-data-redis</artifactId>
+            <groupId>com.vivo.internet</groupId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <artifactId>moonbox-service-data</artifactId>
             <groupId>com.vivo.internet</groupId>
             <version>1.0.0-SNAPSHOT</version>

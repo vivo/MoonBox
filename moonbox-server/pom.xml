@@ -19,6 +19,7 @@
         <module>moonbox-service-agent</module>
         <module>moonbox-service-data</module>
         <module>moonbox-service-data-es</module>
+        <module>moonbox-service-data-redis</module>
     </modules>
     <build>
         <plugins>
