@@ -1,5 +1,10 @@
 # **Moonbox：月光宝盒**
 
+
+### 【本项目已暂停迭代，进入维护状态。 】 最后更新于 2025-4-30 
+
+----
+
 Moonbox（月光宝盒）是[JVM-Sandbox](https://github.com/alibaba/jvm-sandbox-repeater)生态下的，基于[jvm-sandbox-repeater](https://github.com/alibaba/jvm-sandbox-repeater)重新开发的一款流量回放平台产品。在jvm-sandbox-repeater基础上提供了更加丰富功能，同时便于线上部署和使用，[更多对比参考](./docs/repeater-diff.md)。
 
 ## 使用场景
