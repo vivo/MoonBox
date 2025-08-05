@@ -35,7 +35,7 @@
         <jsch.version>0.1.55</jsch.version>
         <apache.common.lang.version>3.12.0</apache.common.lang.version>
         <apache.common.io.version>2.11.0</apache.common.io.version>
-        <lombok.version>1.18.8</lombok.version>
+        <lombok.version>1.18.14</lombok.version>
         <sandbox.api.version>1.2.0</sandbox.api.version>
         <guava.version>23.0</guava.version>
         <page.helper>5.3.1</page.helper>
