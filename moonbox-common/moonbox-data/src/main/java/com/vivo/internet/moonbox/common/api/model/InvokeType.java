@@ -80,6 +80,10 @@ public enum InvokeType {
 
     JPA("jpa"),
 
+    TARS_CLIENT("tars-client"),
+
+    HBASE("hbase"),
+
     UNKNOWN("unknown");
 
     private String invokeName;

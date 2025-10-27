@@ -18,16 +18,18 @@ package com.alibaba.jvm.sandbox.repeater.plugin.tars;
 
 import com.alibaba.jvm.sandbox.api.event.BeforeEvent;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.api.DefaultInvocationProcessor;
-import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
-import com.alibaba.jvm.sandbox.repeater.plugin.domain.Identity;
-import com.alibaba.jvm.sandbox.repeater.plugin.domain.InvokeType;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.utils.MoonboxLogUtils;
 
 import java.lang.reflect.Method;
+
+import com.vivo.internet.moonbox.common.api.model.Identity;
+import com.vivo.internet.moonbox.common.api.model.InvokeType;
 
 /**
  * TarsInvocationProcessor - tars增强逻辑处理器
  */
 public class TarsInvocationProcessor extends DefaultInvocationProcessor {
+
     public TarsInvocationProcessor(InvokeType type) {
         super(type);
     }
@@ -49,7 +51,7 @@ public class TarsInvocationProcessor extends DefaultInvocationProcessor {
             String methodName=method.getName();
             return new Identity(InvokeType.TARS_CLIENT.name(), serviceName, methodName, null);
         }catch (Throwable e){
-            LogUtil.error(e.getMessage(),e);
+            MoonboxLogUtils.error(e.getMessage(),e);
             return new Identity(InvokeType.TARS_CLIENT.name(), "getObjectName", null, null);
         }
     }

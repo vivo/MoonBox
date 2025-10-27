@@ -17,11 +17,12 @@ package com.alibaba.jvm.sandbox.repeater.plugin.hbase;
 
 import com.alibaba.jvm.sandbox.api.event.Event;
 import com.alibaba.jvm.sandbox.repeater.plugin.api.InvocationProcessor;
-import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.AbstractInvokePluginAdapter;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.impl.spi.AbstractInvokePluginAdapter;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.model.EnhanceModel;
-import com.alibaba.jvm.sandbox.repeater.plugin.domain.InvokeType;
 import com.alibaba.jvm.sandbox.repeater.plugin.spi.InvokePlugin;
+
 import com.google.common.collect.Lists;
+import com.vivo.internet.moonbox.common.api.model.InvokeType;
 import org.kohsuke.MetaInfServices;
 
 import java.util.List;
