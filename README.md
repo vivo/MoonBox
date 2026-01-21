@@ -1,5 +1,5 @@
 # **Moonbox：月光宝盒**
-<img width="457" height="469" alt="image" src="https://github.com/user-attachments/assets/2730cdba-e929-4e78-aafd-e998a6c41056" />
+<img width="357" height="369" alt="image" src="https://github.com/user-attachments/assets/2730cdba-e929-4e78-aafd-e998a6c41056" />
 
 
 ### 欢迎加入微信群共建moonbox  更新于2025-10-28
