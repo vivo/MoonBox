@@ -2888,6 +2888,7 @@ public class Hessian2Input
           return error("expected " + expect
                        + " at 0x" + Integer.toHexString(ch & 0xff)
                        + " " + obj.getClass().getName()
+                       + " (id=0x" + Integer.toHexString(System.identityHashCode(obj)) + ")"
                        + "\n  " + context + "");
         }
         else
