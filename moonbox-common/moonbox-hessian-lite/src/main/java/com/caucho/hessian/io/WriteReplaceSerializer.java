@@ -156,7 +156,9 @@ public class WriteReplaceSerializer extends AbstractSerializer
 
       if (obj == repl) {
         if (log.isLoggable(Level.FINE)) { 
-          log.fine(this + ": Hessian writeReplace error.  The writeReplace method (" + _writeReplace + ") must not return the same object: " + obj);
+          log.fine(this + ": Hessian writeReplace error.  The writeReplace method (" + _writeReplace
+                   + ") must not return the same object: " + obj.getClass().getName()
+                   + " (id=0x" + Integer.toHexString(System.identityHashCode(obj)) + ")");
         }
         
         _baseSerializer.writeObject(obj, out);

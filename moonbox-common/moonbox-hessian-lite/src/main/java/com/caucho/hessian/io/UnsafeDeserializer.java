@@ -782,7 +782,8 @@ public class UnsafeDeserializer extends AbstractMapDeserializer {
       throw new HessianFieldException(fieldName + ": " + e.getMessage(), e);
 
     if (value != null)
-      throw new HessianFieldException(fieldName + ": " + value.getClass().getName() + " (" + value + ")"
+      throw new HessianFieldException(fieldName + ": " + value.getClass().getName()
+                                      + " (id=0x" + Integer.toHexString(System.identityHashCode(value)) + ")"
                                       + " cannot be assigned to '" + field.getType().getName() + "'", e);
     else
        throw new HessianFieldException(fieldName + ": " + field.getType().getName() + " cannot be assigned from null", e);
